@@ -240,6 +240,11 @@
                         <div id="title" class="movie-title">Movie:</div>
                         <div id="moviePlayer"></div>
                         <div id="movieDesc" class="movie-desc"></div>
+                        <div>
+                            <button class="top-rated" id="popular">Popular</button>
+                            <button class="top-rated" id="toprated">Trending</button>
+                        </div>
+
                         <div class="movieTime">
                             <div class="movieListTitle">Select Free Movies Below</div>
                             <div id="movieList"></div>
@@ -272,6 +277,7 @@
             const nextPage = document.getElementById("nextPage");
             const prevPage = document.getElementById("prevPage");
             let nextpage = 1;
+            let apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`;
 
             document.addEventListener("DOMContentLoaded", function () {
                 const movieContainer = document.getElementById("moviePlayer");
@@ -279,9 +285,7 @@
 
                 // Function to fetch data and update the movie list
                 function fetchData() {
-                    fetch(
-                        `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`
-                    )
+                    fetch(apiurl)
                         .then((response) => {
                             if (!response.ok) {
                                 throw new Error("Network response was not ok");
@@ -392,7 +396,8 @@
                 nextPage.addEventListener("click", function () {
                     // Increment the value of nextpage
                     nextpage++;
-
+                    apiurl = apiurl.replace(/page=\d+/, `page=${nextpage}`);
+                    console.log(apiurl);
                     // Fetch new data and update the displayed items
                     fetchData();
                 });
@@ -401,6 +406,29 @@
                     // Decrement the value of nextpage
                     nextpage = Math.max(1, nextpage - 1);
 
+                    apiurl = apiurl.replace(/page=\d+/, `page=${nextpage}`);
+                    console.log(apiurl);
+
+                    fetchData();
+                });
+
+                const toprated = document.getElementById("toprated");
+                const popular = document.getElementById("popular");
+
+                toprated.addEventListener("click", function () {
+                    nextpage = 1;
+                    // apiurl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${api_key}&page=${nextpage}&language=en-US&sort_by=popularity.desc`;
+                    apiurl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${api_key}&page=${nextpage}&language=en-US&sort_by=popularity.desc`;
+                    // Log the updated value to the console (you can remove this line in your actual code)
+                    console.log("apiurl:", apiurl);
+
+                    // Fetch new data and update the displayed items
+                    fetchData();
+                });
+
+                popular.addEventListener("click", function () {
+                    nextpage = 1;
+                    apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`;
                     fetchData();
                 });
             });
