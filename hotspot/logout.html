@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/toast.min.css" />
+    <link rel="stylesheet" href="assets/css/core.css" />
+    <link rel="stylesheet" href="assets/css/JuanFi.css" />
+    <title>VPW - Status</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="assets/js/config.js"></script>
+  </head>
+  <body id="loginBody">
+    <div class="container">
+      <center>
+        <form action="$(link-logout)" name="logout">
+          <input type="hidden" name="erase-cookie" value="true" />
+        </form>
+
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="row" style="margin-bottom: 20px">
+              <img src="assets/MainPic.PNG" class="img-fluid" />
+            </div>
+
+            <div class="info">
+              <center>
+                <div class="info-ip">
+                  <img src="assets/img/ip.png" width="20px" height="20px" />
+                  <span>$(ip)</span>
+                </div>
+                <div class="info-mac">
+                  <img src="assets/img/mac.png" width="20px" height="20px" />
+                  <span>$(mac)</span>
+                </div>
+              </center>
+            </div>
+
+            <center>
+              <span class="status-connected"
+                >Status:
+                <span
+                  class="blinking1"
+                  id="connectionStatus"
+                  style="color: #4cd137"
+                  >Paused</span
+                ></span
+              >
+            </center>
+          </div>
+
+          <div class="col-sm-7">
+            <div class="login">
+              <div class="info-status">
+                <center>
+                  <center>
+                    <span
+                      class="form-text text-muted"
+                      style="
+                        color: white !important;
+                        font-size: 20px;
+                        font-weight: bold;
+                        text-shadow: 1px 1px 3px #000;
+                      "
+                      >You're currently on pause</span
+                    >
+                  </center>
+                  <div class="status-holder">
+                    <div class="info-title">
+                      <img
+                        src="assets/img/voucher.png"
+                        width="20px"
+                        height="20px"
+                      /><span> Voucher</span>
+                    </div>
+                    <span
+                      style="
+                        font-size: 25px;
+                        font-weight: bold;
+                        text-shadow: 1px 1px 3px #000;
+                      "
+                      >$(username)</span
+                    >
+                  </div>
+
+                  <div class="break2"></div>
+
+                  <div class="status-holder">
+                    <div class="info-title">
+                      <img
+                        src="assets/img/time.png"
+                        width="20px"
+                        height="20px"
+                      /><span> Remaining Time</span>
+                    </div>
+                    <span
+                      class="odometer"
+                      id="pauseRemainTime"
+                      style="
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-shadow: 1px 1px 3px #000;
+                      "
+                    ></span
+                    ><br />
+                  </div>
+
+                  <div class="status-holder">
+                    <div class="info-title">
+                      <img
+                        src="assets/img/timeexpired.png"
+                        width="20px"
+                        height="20px"
+                      /><span> Expiration Time</span>
+                    </div>
+                    <span
+                      id="expirationTime"
+                      style="
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-shadow: 1px 1px 3px #000;
+                      "
+                    ></span>
+                  </div>
+                </center>
+              </div>
+
+              <button
+                type="button"
+                id="connectBtn"
+                onClick="resume(); return false"
+                class="btn-insert-coin"
+                style="
+                  margin-top: 20px;
+                  display: block;
+                  width: 100%;
+                  text-shadow: 0px 1px 3px #000;
+                "
+              >
+                RESUME SESSION
+              </button>
+              <div style="margin-bottom: -5px"></div>
+              <br />
+              <button
+                type="button"
+                id="cancelBtn"
+                onClick="cancelPause(); return false"
+                class="btn-insert-coin"
+                style="
+                  display: block;
+                  width: 100%;
+                  color: #fff;
+                  text-shadow: 0px 1px 2px #000;
+                "
+              >
+                CANCEL SESSION
+              </button>
+            </div>
+            <div class="footer">
+              <h5>Terms of usage</h5>
+              <ol style="text-align: left">
+                <li style="font-size: 14px">
+                  Ang kadasigon sing internet connection indi kontrolado ni
+                  kaning.
+                </li>
+                <li style="font-size: 14px">
+                  Nakadependi sa oras kag sa panahon kag kay PLDT and kadasigon
+                  sing Internet.
+                </li>
+                <li style="font-size: 14px">
+                  Pag naka hulog kana kag mahina ang connection, wala sing
+                  obligasyon si kaning para ibalik ang bayad.
+                </li>
+                <li style="font-size: 14px">
+                  Pag nag-brownout kag nakahulog kana, wala na sing refund. Indi
+                  sala ni kaning nga nagbrowout.
+                </li>
+                <li style="font-size: 14px">
+                  Tanda-e lang ninyo ang inyo voucher code kay makaconnect pa
+                  man kamo liwat basta wala pa nag expire ang inyo oras.
+                </li>
+                <li style="font-size: 14px">
+                  <strong>30mbps</strong> hasta <strong>40mbps</strong> ang
+                  speed sing wifi galing indi sya guranteed kay nakadepende sa
+                  internet. Under normal condition, makaya nya gidman ina
+                  maabot.
+                </li>
+                <li style="font-size: 14px">
+                  Pewdi mo macheck ang remaining time mo kag ma pause or
+                  ma-extend ini paagi sa type lang sa browser ang
+                  <a
+                    style="color: #f1c40f"
+                    href="http://192.168.50.1/"
+                    target="_blank"
+                    >http://venise.wifi/</a
+                  >.
+                </li>
+                <li style="font-size: 14px">
+                  May mga cellphone nga indi makapause or maka open sing portal
+                  after magconnect sa wifi. Wala na sing mahimo si kaning sa
+                  sina nga problema, gani gamita na lang hasta maubos ang imo
+                  time.
+                </li>
+                <li style="font-size: 14px">
+                  Once connected kana sa internet, buot silingon nga nag sugot
+                  ka sa sini nga terms of usage.
+                </li>
+              </ol>
+            </div>
+            <div class="footer">
+              <span class="footers">
+                Created by:
+                <a href="https://www.facebook.com/kibarne" target="_blank"
+                  >Dindz Studio</a
+                >
+                &copy; All rights reserved 2023<br />
+              </span>
+            </div>
+          </div>
+          <script src="assets/js/jquery.min.js"></script>
+          <script src="assets/js/popper.min.js"></script>
+          <script src="assets/js/bootstrap.min.js"></script>
+          <script src="assets/js/toast.min.js"></script>
+          <script src="assets/js/core.js"></script>
+          <script src="assets/js/eload.js"></script>
+
+          <script>
+            var loginError = "";
+            var mac = "$(mac)";
+            var logoutUrl = "$(link-logout)";
+            var remainingTimer = null;
+            var hotspotAddress = "$(server-address)";
+            var interfaceName = "$(interface-name)";
+
+            $(document).ready(function () {
+              $("#expirationTime").html("Loading...");
+              setTimeout(function () {
+                fetchValidity(1);
+              }, 1000);
+            });
+          </script>
+
+          <div id="loaderDiv" class="spinner hidden">
+            <center>
+              <img src="assets/loading.svg" />
+            </center>
+          </div>
+        </div>
+      </center>
+    </div>
+  </body>
+</html>
