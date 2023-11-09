@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>VPW - Free Movies</title>
+        <title>VPW - Free Pinoy Movies</title>
         <style>
             * {
                 margin: 0;
@@ -252,8 +252,8 @@
                             <a href="./status.html" target="_blank" class="r-status"
                                 ><button type="submit" class="btn-r-status">Return to Wifi Status</button></a
                             >
-                            <a href="./pmovies.html" target="_blank" class="r-status"
-                                ><button type="submit" class="btn-r-status">Pinoy Movies</button></a
+                            <a href="./movies.html" target="_blank" class="r-status"
+                                ><button type="submit" class="btn-r-status">Foreign Movies</button></a
                             >
                         </div>
                         <div class="movie-footer">
@@ -280,7 +280,7 @@
                 // Function to fetch data and update the movie list
                 function fetchData() {
                     fetch(
-                        `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`
+                        `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`
                     )
                         .then((response) => {
                             if (!response.ok) {
@@ -317,7 +317,7 @@
                 function addMovieToContainer(movie) {
                     // ... (your existing addMovieToContainer function remains unchanged)
                     const movieElement = document.createElement("iframe");
-                    movieElement.src = "https://vidsrc.to/embed/movie/" + movie.id;
+                    movieElement.src = " https://flixembed.com/video/" + movie.id;
                     movieElement.className = "movie-iframe";
                     movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
                     movieContainer.innerHTML = "";
@@ -371,7 +371,7 @@
 
                 function playMovie(imdb_id, title, movieDesc) {
                     // ... (your existing playMovie function remains unchanged)
-                    const iframeSrc = "https://vidsrc.to/embed/movie/" + imdb_id;
+                    const iframeSrc = " https://flixembed.com/video/" + imdb_id;
                     movieContainer.innerHTML = "";
                     const movieIframe = document.createElement("iframe");
                     movieIframe.src = iframeSrc;
