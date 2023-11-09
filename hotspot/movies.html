@@ -129,6 +129,10 @@
                 text-align: left;
             }
 
+            .r-status {
+                width: 100%;
+            }
+
             .btn-r-status {
                 margin-top: 10px;
                 cursor: pointer;
@@ -215,6 +219,17 @@
                 text-align: left;
                 margin-top: 10px;
             }
+
+            .labels {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+            .returnHome {
+                display: flex;
+                flex-direction: row;
+                gap: 15px;
+            }
         </style>
     </head>
     <body>
@@ -233,9 +248,14 @@
                             <button type="button" id="prevPage" class="btn-r-status">Previous Page</button>
                             <button type="button" id="nextPage" class="btn-r-status">Next page</button>
                         </div>
-                        <a href="./status.html" target="_blank" class="r-status"
-                            ><button type="submit" class="btn-r-status">Return to Wifi Status</button></a
-                        >
+                        <div class="returnHome">
+                            <a href="./status.html" target="_blank" class="r-status"
+                                ><button type="submit" class="btn-r-status">Return to Wifi Status</button></a
+                            >
+                            <a href="./pinoymovies.html" target="_blank" class="r-status"
+                                ><button type="submit" class="btn-r-status">Pinoy Movies</button></a
+                            >
+                        </div>
                         <div class="movie-footer">
                             Created by:
                             <a href="https://www.facebook.com/kibarne" target="_blank">Dindz Studio</a>
@@ -260,7 +280,7 @@
                 // Function to fetch data and update the movie list
                 function fetchData() {
                     fetch(
-                        `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=false&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`
+                        `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`
                     )
                         .then((response) => {
                             if (!response.ok) {
@@ -269,7 +289,6 @@
                             return response.json();
                         })
                         .then((data) => {
-                            console.log(data);
                             // Clear existing movie list
                             movieListContainer.innerHTML = "";
 
@@ -317,7 +336,8 @@
                     movieListItem.addEventListener("click", function () {
                         playMovie(movie.id, movie.title, movie.overview);
                     });
-
+                    const label = document.createElement("div");
+                    label.className = "labels";
                     const movieImg = document.createElement("img");
                     movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
                     movieImg.alt = movie.title;
@@ -327,17 +347,24 @@
                     const movieTitle = document.createElement("h4");
                     movieTitle.textContent = movie.title;
                     movieTitle.className = "movieTitle";
-                    movieListItem.appendChild(movieTitle);
+                    label.appendChild(movieTitle);
 
                     const movieYear = document.createElement("p");
-                    movieYear.textContent = `Year: ${movie.release_date.slice(0, 4)}`;
+                    movieYear.textContent = `Release: ${movie.release_date}`;
                     movieYear.className = "movieYear";
-                    movieListItem.appendChild(movieYear);
+                    label.appendChild(movieYear);
 
                     const movieRating = document.createElement("p");
-                    movieRating.textContent = `Rating: ${movie.vote_average}`;
+                    movieRating.textContent = `Rating: ${movie.vote_average}/10`;
                     movieRating.className = "movieRating";
-                    movieListItem.appendChild(movieRating);
+                    label.appendChild(movieRating);
+
+                    const popularity = document.createElement("p");
+                    popularity.textContent = `Popularity: ${movie.popularity}`;
+                    popularity.className = "popularity";
+                    label.appendChild(popularity);
+
+                    movieListItem.appendChild(label);
 
                     movieListContainer.appendChild(movieListItem);
                 }
@@ -365,9 +392,6 @@
                 nextPage.addEventListener("click", function () {
                     // Increment the value of nextpage
                     nextpage++;
-
-                    // Log the updated value to the console (you can remove this line in your actual code)
-                    console.log("Next Page Value:", nextpage);
 
                     // Fetch new data and update the displayed items
                     fetchData();
