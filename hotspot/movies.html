@@ -253,12 +253,28 @@
                     flex-wrap: wrap;
                 }
                 .search-input {
-                    width: auto;
+                    width: 90%;
                 }
 
                 .search {
                     position: static !important;
                 }
+                .r-status {
+                    font-size: 14px;
+                }
+                .btn-r-status {
+                    font-size: 12px;
+                }
+            }
+
+            @media only screen and (max-width: 375px) {
+                .movie-btn {
+                    width: 100%;
+                    border: 5px;
+                }
+                /* .top-rated.searchBtn {
+                    width: 100% !important;
+                } */
             }
             .search {
                 display: flex;
@@ -359,15 +375,15 @@
                             <div id="movieList"></div>
                         </div>
                         <div class="btnContainer">
-                            <button type="button" id="prevPage" class="btn-r-status">Previous Page</button>
-                            <button type="button" id="nextPage" class="btn-r-status">Next page</button>
+                            <button type="button" id="prevPage" class="btn-r-status">Previous</button>
+                            <button type="button" id="nextPage" class="btn-r-status">Next</button>
                         </div>
                         <div class="returnHome">
                             <a href="./status.html" target="_blank" class="r-status"
                                 ><button type="submit" class="btn-r-status">Wifi Status</button></a
                             >
                             <a href="./pmovies.html" target="_blank" class="r-status"
-                                ><button type="submit" class="btn-r-status">Pinoy Movies</button></a
+                                ><button type="submit" class="btn-r-status">TV Series</button></a
                             >
                         </div>
                         <div class="movie-footer">
