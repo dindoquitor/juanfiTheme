@@ -185,6 +185,7 @@
         justify-content: flex-start;
         align-items: center;
         gap: 10px;
+        position: relative;
       }
 
       .btn-r-status {
@@ -254,8 +255,34 @@
           width: 100% !important;
           height: 100% !important;
         }
+        .categories {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .search-input {
+          width: auto;
+        }
+      }
+      .search {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 20px;
       }
 
+      .top-rated.searchBtn {
+        width: 70px;
+        height: 35px;
+        padding: 0;
+        border-radius: 0;
+      }
+
+      .search-img {
+        max-width: 100%;
+        max-height: 100%;
+      }
       .movie-img {
         width: 150px;
         height: 230px;
@@ -284,6 +311,13 @@
         flex-direction: row;
         gap: 15px;
       }
+
+      .search-input {
+        border: 2px solid #fff;
+        border-radius: 0;
+        height: 35px;
+        padding: 5px 10px;
+      }
     </style>
   </head>
   <body>
@@ -299,6 +333,18 @@
               <button class="top-rated" id="popular">Popular</button>
               <button class="top-rated" id="toprated">Trending</button>
               <button class="top-rated" id="pnoy">Korean</button>
+              <button class="top-rated" id="server1">Server 2</button>
+              <div class="search">
+                <input class="search-input" type="text" id="search" />
+                <button class="top-rated searchBtn" id="searchBtn">
+                  <img
+                    class="search-img"
+                    src="./assets/img/search.png"
+                    alt=""
+                    srcset=""
+                  />
+                </button>
+              </div>
             </div>
 
             <div class="movieTime">
@@ -342,6 +388,9 @@
       const imageBaseURL = "https://image.tmdb.org/t/p/";
       const nextPage = document.getElementById("nextPage");
       const prevPage = document.getElementById("prevPage");
+      const search = document.getElementById("search");
+      const searchBtn = document.getElementById("searchBtn");
+      const server1 = document.getElementById("server1");
       let nextpage = 1;
       let apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`;
 
@@ -387,9 +436,10 @@
         function addMovieToContainer(movie) {
           // ... (your existing addMovieToContainer function remains unchanged)
           const movieElement = document.createElement("iframe");
-          movieElement.src = "https://vidsrc.to/embed/movie/" + movie.id;
+          movieElement.src = "https://vidsrc.net/embed/movie?tmdb=" + movie.id;
           movieElement.className = "movie-iframe";
           movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
+
           movieContainer.innerHTML = "";
           movieContainer.appendChild(movieElement);
 
@@ -404,10 +454,13 @@
           // movieListItem.textContent = movie.title;
           movieListItem.className = "movie-btn";
           movieListItem.addEventListener("click", function () {
+            saveMovieIdToLocalstorage(movie.id);
             playMovie(movie.id, movie.title, movie.overview);
           });
+
           const label = document.createElement("div");
           label.className = "labels";
+
           const movieImg = document.createElement("img");
           movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
           movieImg.alt = movie.title;
@@ -461,6 +514,14 @@
           });
         }
 
+        function saveMovieIdToLocalstorage(movieId) {
+          localStorage.setItem("selectedMovieId", movieId);
+        }
+
+        function getSavedMovieId() {
+          return localStorage.getItem("selectedMovieId");
+        }
+
         nextPage.addEventListener("click", function () {
           // Increment the value of nextpage
           nextpage++;
@@ -497,14 +558,33 @@
 
         popular.addEventListener("click", function () {
           nextpage = 1;
-          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc&year=2023`;
+          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=false&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc&year=2023`;
           fetchData();
         });
 
         pnoy.addEventListener("click", function () {
           nextpage = 1;
-          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&with_original_language=ko`;
+          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=false&include_video=false&language=en-US&page=${nextpage}&with_original_language=ko`;
           fetchData();
+        });
+
+        searchBtn.addEventListener("click", function () {
+          nextpage = 1;
+          apiurl = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
+          fetchData();
+        });
+
+        // play in server 1
+        server1.addEventListener("click", function () {
+          console.log(getSavedMovieId());
+          const imdb_id = getSavedMovieId();
+          const iframeSrc = "https://vidsrc.me/embed/movie?tmdb=" + imdb_id;
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
         });
       });
     </script>
