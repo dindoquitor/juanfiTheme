@@ -83,7 +83,8 @@
       .movie-title,
       .movieListTitle,
       .movie-desc,
-      .categories {
+      .categories,
+      .tvshows {
         width: 200px;
         height: auto;
         border-radius: 10px;
@@ -178,7 +179,8 @@
         width: 100%;
       }
 
-      .categories {
+      .categories,
+      .tvshows {
         width: auto;
         display: flex;
         flex-direction: row;
@@ -262,6 +264,10 @@
         .search-input {
           width: auto;
         }
+
+        .search {
+          position: static !important;
+        }
       }
       .search {
         display: flex;
@@ -332,8 +338,10 @@
               <strong>Categories:</strong>
               <button class="top-rated" id="popular">Popular</button>
               <button class="top-rated" id="toprated">Trending</button>
-              <button class="top-rated" id="pnoy">Korean</button>
+              <button class="top-rated" id="pnoy">Tagalog</button>
               <button class="top-rated" id="server1">Server 2</button>
+              <button class="top-rated" id="server2">Pinoy Server</button>
+              <button class="top-rated" id="server3">Pinoy Server 2</button>
               <div class="search">
                 <input class="search-input" type="text" id="search" />
                 <button class="top-rated searchBtn" id="searchBtn">
@@ -346,7 +354,11 @@
                 </button>
               </div>
             </div>
-
+            <div class="tvshows">
+              <strong>TV Shows</strong>
+              <button class="top-rated" id="tvShows">TV Shows</button>
+              <button class="top-rated" id="server4">TV Server</button>
+            </div>
             <div class="movieTime">
               <div class="movieListTitle">Select Free Movies Below</div>
               <div id="movieList"></div>
@@ -391,6 +403,11 @@
       const search = document.getElementById("search");
       const searchBtn = document.getElementById("searchBtn");
       const server1 = document.getElementById("server1");
+      const server2 = document.getElementById("server2");
+      const server3 = document.getElementById("server3");
+      const server4 = document.getElementById("server4");
+      const tvShows = document.getElementById("tvShows");
+      let ismovie = true;
       let nextpage = 1;
       let apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`;
 
@@ -566,7 +583,13 @@
 
         pnoy.addEventListener("click", function () {
           nextpage = 1;
-          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=false&include_video=false&language=en-US&page=${nextpage}&with_original_language=ko`;
+          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&with_original_language=tl`;
+          fetchData();
+        });
+
+        tvShows.addEventListener("click", function () {
+          nextpage = 1;
+          apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
           fetchData();
         });
 
@@ -574,6 +597,7 @@
           nextpage = 1;
           apiurl = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
           fetchData();
+          search.value = "";
         });
 
         // play in server 1
@@ -581,6 +605,30 @@
           console.log(getSavedMovieId());
           const imdb_id = getSavedMovieId();
           const iframeSrc = "https://vidsrc.me/embed/movie?tmdb=" + imdb_id;
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+        });
+
+        server2.addEventListener("click", function () {
+          console.log(getSavedMovieId());
+          const imdb_id = getSavedMovieId();
+          const iframeSrc = "https://vivamax.asia/embed/" + imdb_id;
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+        });
+
+        server3.addEventListener("click", function () {
+          console.log(getSavedMovieId());
+          const imdb_id = getSavedMovieId();
+          const iframeSrc = "https://flixembed.com/video/" + imdb_id;
           movieContainer.innerHTML = "";
           const movieIframe = document.createElement("iframe");
           movieIframe.src = iframeSrc;
