@@ -324,6 +324,13 @@
         height: 35px;
         padding: 5px 10px;
       }
+
+      .episodes {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
     </style>
   </head>
   <body>
@@ -336,8 +343,8 @@
             <div id="movieDesc" class="movie-desc"></div>
             <div class="categories">
               <strong>Categories:</strong>
-              <button class="top-rated" id="popular">Popular</button>
-              <button class="top-rated" id="toprated">Trending</button>
+              <button class="top-rated" id="popular">Korean</button>
+              <button class="top-rated" id="toprated">English</button>
               <button class="top-rated" id="pnoy">Tagalog</button>
               <button class="top-rated" id="server1">Server 2</button>
               <button class="top-rated" id="server2">Pinoy Server</button>
@@ -356,8 +363,12 @@
             </div>
             <div class="tvshows">
               <strong>TV Shows</strong>
-              <button class="top-rated" id="tvShows">TV Shows</button>
+              <button class="top-rated" id="tvShows">Episodes</button>
               <button class="top-rated" id="server4">TV Server</button>
+            </div>
+            <div class="tvshows">
+              <strong>Episodes:</strong>
+              <ul class="episodes" id="episodes"></ul>
             </div>
             <div class="movieTime">
               <div class="movieListTitle">Select Free Movies Below</div>
@@ -407,9 +418,10 @@
       const server3 = document.getElementById("server3");
       const server4 = document.getElementById("server4");
       const tvShows = document.getElementById("tvShows");
+      const episodelist = document.getElementById("episodes");
       let ismovie = true;
       let nextpage = 1;
-      let apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc`;
+      let apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
 
       document.addEventListener("DOMContentLoaded", function () {
         const movieContainer = document.getElementById("moviePlayer");
@@ -425,6 +437,7 @@
               return response.json();
             })
             .then((data) => {
+              console.log(data);
               // Clear existing movie list
               movieListContainer.innerHTML = "";
 
@@ -450,10 +463,62 @@
         // Initial fetch when the page loads
         fetchData();
 
+        async function fetchEpisodes() {
+          try {
+            const response = await fetch(apiurl);
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Check if 'episodes' property exists and is an array
+            if (data.episodes && Array.isArray(data.episodes)) {
+              const episodes = data.episodes;
+
+              // Process the episodes data as needed
+              console.log(episodes);
+
+              // Clear existing content in episodelist
+              episodelist.innerHTML = "";
+
+              // You can now loop through the episodes and handle the data accordingly
+              for (const episode of episodes) {
+                const episodeItem = document.createElement("li");
+                episodeItem.className = "top-rated";
+                episodeItem.textContent = episode.name;
+
+                // Add a click event listener to call playMovie function
+                episodeItem.addEventListener("click", function () {
+                  playMovie(
+                    episode.id,
+                    episode.name,
+                    episode.season_number,
+                    episode.episode_number,
+                    episode.overview
+                  );
+                });
+
+                episodelist.appendChild(episodeItem);
+              }
+            } else {
+              console.error(
+                'Invalid or missing "episodes" property in the API response.'
+              );
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error.message);
+          }
+        }
+
+        // Call the fetchEpisodes function to initiate the API request
+        fetchEpisodes();
+
         function addMovieToContainer(movie) {
           // ... (your existing addMovieToContainer function remains unchanged)
           const movieElement = document.createElement("iframe");
           movieElement.src = "https://vidsrc.net/embed/movie?tmdb=" + movie.id;
+          // movieElement.src = `https://vidsrc.to/embed/tv/${movie.id}/${movie.season_number}/${movie.episode_number}`;
           movieElement.className = "movie-iframe";
           movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
 
@@ -462,7 +527,7 @@
 
           document.getElementById(
             "title"
-          ).innerHTML = `<p><strong>Movie Title:</strong>  ${movie.title} </p>`;
+          ).innerHTML = `<p><strong>Movie Title:</strong>  ${movie.name} </p>`;
           document.getElementById(
             "movieDesc"
           ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
@@ -472,7 +537,9 @@
           movieListItem.className = "movie-btn";
           movieListItem.addEventListener("click", function () {
             saveMovieIdToLocalstorage(movie.id);
-            playMovie(movie.id, movie.title, movie.overview);
+            apiurl = `https://api.themoviedb.org/3/tv/${movie.id}/season/1?api_key=${api_key}`;
+            fetchEpisodes();
+            playMovie(movie.id, movie.name, 1, 1, movie.overview);
           });
 
           const label = document.createElement("div");
@@ -480,17 +547,17 @@
 
           const movieImg = document.createElement("img");
           movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
-          movieImg.alt = movie.title;
+          movieImg.alt = movie.name;
           movieImg.className = "movie-img";
           movieListItem.appendChild(movieImg);
 
           const movieTitle = document.createElement("h4");
-          movieTitle.textContent = movie.title;
+          movieTitle.textContent = movie.name;
           movieTitle.className = "movieTitle";
           label.appendChild(movieTitle);
 
           const movieYear = document.createElement("p");
-          movieYear.textContent = `Release: ${movie.release_date}`;
+          movieYear.textContent = `Release: ${movie.first_air_date}`;
           movieYear.className = "movieYear";
           label.appendChild(movieYear);
 
@@ -509,9 +576,12 @@
           movieListContainer.appendChild(movieListItem);
         }
 
-        function playMovie(imdb_id, title, movieDesc) {
+        function playMovie(imdb_id, title, seasonNo, episodeNo, movieDesc) {
           // ... (your existing playMovie function remains unchanged)
-          const iframeSrc = "https://vidsrc.to/embed/movie/" + imdb_id;
+          const movieID = getSavedMovieData();
+          // const iframeSrc = "https://vidsrc.to/embed/tv/" + imdb_id;
+          const iframeSrc = `https://vidsrc.to/embed/tv/${movieID.movieId}/${seasonNo}/${episodeNo}`;
+          console.log("Iframe source:", iframeSrc);
           movieContainer.innerHTML = "";
           const movieIframe = document.createElement("iframe");
           movieIframe.src = iframeSrc;
@@ -531,15 +601,56 @@
           });
         }
 
-        function saveMovieIdToLocalstorage(movieId) {
-          localStorage.setItem("selectedMovieId", movieId);
+        // function saveMovieIdToLocalstorage(movieId) {
+        //   localStorage.setItem("selectedMovieId", movieId);
+        // }
+
+        // function getSavedMovieId() {
+        //   return localStorage.getItem("selectedMovieId");
+        // }
+
+        // getSavedMovieId();
+
+        // Saves the provided movie ID, season number, and episode number to local storage.
+        //
+        // Parameters:
+        // - movieId (string): The ID of the movie to be saved.
+        // - seasonNumber (number): The season number of the movie to be saved.
+        // - episodeNumber (number): The episode number of the movie to be saved.
+        //
+        // Returns:
+        // - None
+        function saveMovieIdToLocalstorage(
+          movieId,
+          seasonNumber,
+          episodeNumber
+        ) {
+          const dataToSave = {
+            movieId: movieId,
+            seasonNumber: seasonNumber,
+            episodeNumber: episodeNumber,
+          };
+
+          // Convert the data to a JSON string and store it in local storage
+          localStorage.setItem("selectedMovieData", JSON.stringify(dataToSave));
         }
 
-        function getSavedMovieId() {
-          return localStorage.getItem("selectedMovieId");
+        // Retrieves the saved movie data from the local storage.
+        function getSavedMovieData() {
+          const savedDataString = localStorage.getItem("selectedMovieData");
+          if (savedDataString) {
+            return JSON.parse(savedDataString);
+          }
+          return null;
         }
 
-        getSavedMovieId();
+        // Example usage:
+        const savedData = getSavedMovieData();
+        if (savedData) {
+          console.log("Movie ID:", savedData.movieId);
+          console.log("Season Number:", savedData.seasonNumber);
+          console.log("Episode Number:", savedData.episodeNumber);
+        }
 
         nextPage.addEventListener("click", function () {
           // Increment the value of nextpage
@@ -567,7 +678,7 @@
         toprated.addEventListener("click", function () {
           nextpage = 1;
           // apiurl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${api_key}&page=${nextpage}&language=en-US&sort_by=popularity.desc`;
-          apiurl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${api_key}&page=${nextpage}&language=en-US&sort_by=popularity.desc`;
+          apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=en`;
           // Log the updated value to the console (you can remove this line in your actual code)
           console.log("apiurl:", apiurl);
 
@@ -577,25 +688,27 @@
 
         popular.addEventListener("click", function () {
           nextpage = 1;
-          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=false&include_video=false&language=en-US&page=${nextpage}&sort_by=popularity.desc&year=2023`;
+          apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=ko&year=2023`;
           fetchData();
         });
 
         pnoy.addEventListener("click", function () {
           nextpage = 1;
-          apiurl = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&&include_adult=true&include_video=false&language=en-US&page=${nextpage}&with_original_language=tl`;
-          fetchData();
-        });
-
-        tvShows.addEventListener("click", function () {
-          nextpage = 1;
           apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
           fetchData();
         });
 
+        tvShows.addEventListener("click", function () {
+          episodelist.innerHTM = "";
+          const imdb_id = getSavedMovieId();
+          nextpage = 1;
+          apiurl = `https://api.themoviedb.org/3/tv/${imdb_id}/season/1?api_key=${api_key}`;
+          fetchEpisodes();
+        });
+
         searchBtn.addEventListener("click", function () {
           nextpage = 1;
-          apiurl = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
+          apiurl = `https://api.themoviedb.org/3/search/tv?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
           fetchData();
           search.value = "";
         });
@@ -614,9 +727,11 @@
         });
 
         server2.addEventListener("click", function () {
-          console.log(getSavedMovieId());
-          const imdb_id = getSavedMovieId();
-          const iframeSrc = "https://vivamax.asia/embed/" + imdb_id;
+          console.log(getSavedMovieData());
+          const movieData = getSavedMovieData();
+          // const iframeSrc = "https://vivamax.asia/embed/" + imdb_id;
+          const iframeSrc = `https://vivamax.asia/embed/series?id=${movieData.movieId}R&sea=${movieData.seasonNumber}&epi=${movieData.episodeNumber}`;
+          console.log("Pinoy Iframe Source:", iframeSrc);
           movieContainer.innerHTML = "";
           const movieIframe = document.createElement("iframe");
           movieIframe.src = iframeSrc;
