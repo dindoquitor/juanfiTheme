@@ -507,6 +507,56 @@
                         });
                 }
 
+                function fetchAndSaveMovieData(movieId, apiKey) {
+                    const apiUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`;
+
+                    return fetch(apiUrl)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then((movieData) => {
+                            saveMovieDataToLocalstorage(movieData);
+                            return movieData;
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching and saving movie data:", error.message);
+                        });
+                }
+
+                function saveMovieDataToLocalstorage(movieData) {
+                    // Convert the data to a JSON string and store it in local storage
+                    localStorage.setItem("selectedMovieData", JSON.stringify(movieData));
+                }
+
+                // // Example usage:
+                // const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
+                // const movieIdToFetch = 385687; // Replace with the actual movie ID
+                // fetchAndSaveMovieData(movieIdToFetch, apiKey).then((movieData) => {
+                //     console.log("Movie Data:", movieData);
+                //     // The movie data is already saved in local storage
+                // });
+
+                function getMovieDataFromLocalStorage() {
+                    // Retrieve the JSON string from local storage
+                    const storedMovieData = localStorage.getItem("selectedMovieData");
+
+                    // Parse the JSON string to get the actual movie data
+                    return JSON.parse(storedMovieData);
+                }
+
+                // Example usage:
+                const retrievedMovieData = getMovieDataFromLocalStorage();
+
+                // Check if there is stored data
+                if (retrievedMovieData) {
+                    console.log("Retrieved Movie Data:", retrievedMovieData);
+                } else {
+                    console.log("No movie data found in local storage.");
+                }
+
                 function addMovieToContainer(movie) {
                     // ... (your existing addMovieToContainer function remains unchanged)
 
@@ -520,7 +570,7 @@
 
                     document.getElementById(
                         "title"
-                    ).innerHTML = `<p><strong>Movie Title:</strong>  ${movie.title} </p>`;
+                    ).innerHTML = `<p><strong>Movie Title: </strong> <i> ${movie.title}</i> </p>`;
                     document.getElementById(
                         "movieDesc"
                     ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
@@ -532,7 +582,10 @@
                         saveMovieIdToLocalstorage(movie.id);
                         playMovie(movie.id, movie.title, movie.overview);
                         getMovieCast(movie.id, api_key);
+                        fetchAndSaveMovieData(movie.id, api_key);
                     });
+
+                    const movieDetails = getMovieDataFromLocalStorage();
 
                     const label = document.createElement("div");
                     label.className = "labels";
@@ -563,12 +616,18 @@
                     popularity.className = "popularity";
                     label.appendChild(popularity);
 
+                    const runTime = document.createElement("p");
+                    runTime.textContent = `Runtime: ${movieDetails.runtime} mins.`;
+                    runTime.className = "runTime";
+                    label.appendChild(runTime);
+
                     movieListItem.appendChild(label);
 
                     movieListContainer.appendChild(movieListItem);
                 }
 
                 function playMovie(imdb_id, title, movieDesc) {
+                    const movieDetails = getMovieDataFromLocalStorage();
                     // ... (your existing playMovie function remains unchanged)
                     const iframeSrc = "https://vidsrc.to/embed/movie/" + imdb_id;
                     movieContainer.innerHTML = "";
@@ -577,7 +636,9 @@
                     movieIframe.className = "movie-iframe";
                     movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
                     movieContainer.appendChild(movieIframe);
-                    document.getElementById("title").innerHTML = `<p><strong>Movie Title:</strong>   ${title}<p/>`;
+                    document.getElementById(
+                        "title"
+                    ).innerHTML = `<p><strong>Movie Title: </strong>   <i>${title}</i> - <strong>Runtime: ${movieDetails.runtime} mins.</strong><p/>`;
                     document.getElementById(
                         "movieDesc"
                     ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;

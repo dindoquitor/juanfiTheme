@@ -81,7 +81,8 @@
             .movieListTitle,
             .movie-desc,
             .categories,
-            .tvshows {
+            .tvshows,
+            .no-results-message {
                 width: 200px;
                 height: auto;
                 border-radius: 10px;
@@ -330,6 +331,10 @@
             .tvshows {
                 align-items: start;
             }
+            .no-results-message {
+                width: auto;
+                text-align: center;
+            }
         </style>
     </head>
     <body>
@@ -425,12 +430,13 @@
                             // Clear existing movie list
                             movieListContainer.innerHTML = "";
 
-                            if (Array.isArray(data.results)) {
+                            if (Array.isArray(data.results) && data.results.length > 0) {
                                 data.results.forEach((movie) => {
                                     addMovieToContainer(movie);
                                 });
                             } else {
                                 console.error("Invalid data format");
+                                displayNoResultsMessage();
                             }
                         })
                         .catch((error) => {
@@ -446,6 +452,16 @@
 
                 // Initial fetch when the page loads
                 fetchData();
+
+                function displayNoResultsMessage() {
+                    // Create a message element
+                    const noResultsMessage = document.createElement("p");
+                    noResultsMessage.className = "no-results-message";
+                    noResultsMessage.textContent = "No results found. Please try a different search.";
+
+                    // Append the message to the movie list container
+                    movieListContainer.appendChild(noResultsMessage);
+                }
 
                 async function fetchEpisodes() {
                     try {
@@ -506,6 +522,14 @@
                 // Call the fetchEpisodes function to initiate the API request
                 fetchEpisodes();
 
+                // Retrieves the cast of a movie from the API using the provided movie ID and API key.
+                //
+                // Parameters:
+                // - movieId (number): The ID of the movie.
+                // - apiKey (string): The API key for accessing the movie database.
+                //
+                // Returns:
+                // - None
                 function getMovieCast(movieId, apiKey) {
                     const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/credits?api_key=${apiKey}`;
 
@@ -539,6 +563,50 @@
                         });
                 }
 
+                // Global variable to store content ratings
+                const contentRatingsMap = {};
+
+                // Function to fetch and save content ratings
+                function fetchAndSaveContentRating(movieId, apiKey) {
+                    const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/content_ratings?api_key=${apiKey}`;
+
+                    fetch(apiUrl)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            // Check if the data structure matches your expectations
+                            if (data && Array.isArray(data.results) && data.results.length > 0) {
+                                const rating = data.results[0].rating;
+                                saveContentRating(movieId, rating);
+                            } else {
+                                console.error("Invalid data format");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching content ratings:", error.message);
+                        });
+                }
+
+                // Function to find content rating (for simplicity, it returns the first rating)
+                function findContentRating(ratings) {
+                    console.log("All Ratings:", ratings); // Log all ratings
+                    return ratings.length > 0 ? ratings[0].rating : "N/A";
+                }
+
+                // Function to save content rating in the global variable
+                function saveContentRating(movieId, rating) {
+                    contentRatingsMap[movieId] = rating;
+                }
+
+                // Function to retrieve content rating for a movie ID
+                function getContentRating(movieId) {
+                    return contentRatingsMap[movieId] || "N/A";
+                }
+
                 function addMovieToContainer(movie) {
                     // ... (your existing addMovieToContainer function remains unchanged)
                     const movieElement = document.createElement("iframe");
@@ -566,6 +634,7 @@
                         fetchEpisodes();
                         playMovie(movie.id, movie.name, 1, 1, movie.overview);
                         getMovieCast(movie.id, api_key);
+                        fetchAndSaveContentRating(movie.id, api_key);
                     });
 
                     const label = document.createElement("div");
@@ -605,6 +674,7 @@
                 function playMovie(imdb_id, title, seasonNo, episodeNo, movieDesc) {
                     // ... (your existing playMovie function remains unchanged)
                     const movieID = getSavedMovieData();
+                    const rating = getContentRating(movieID.movieId);
                     // const iframeSrc = "https://vidsrc.to/embed/tv/" + imdb_id;
                     const iframeSrc = `https://vidsrc.to/embed/tv/${movieID.movieId}/${seasonNo}/${episodeNo}`;
 
@@ -616,7 +686,7 @@
                     movieContainer.appendChild(movieIframe);
                     document.getElementById(
                         "title"
-                    ).innerHTML = `<p><strong>TV Show Title: </strong><i>${movieID.showName}</i> - <strong>Episode:</strong> <i>${title}</i><p/>`;
+                    ).innerHTML = `<p><strong>TV Show Title: </strong><i>${movieID.showName}</i> - <strong>Episode:</strong> <i>${title}</i> - Rating: <i>${rating}</i><p/>`;
                     document.getElementById(
                         "movieDesc"
                     ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;
