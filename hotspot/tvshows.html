@@ -316,6 +316,20 @@
                 flex-wrap: wrap;
                 gap: 5px;
             }
+
+            .casts {
+                list-style: none;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .cast-item {
+                font-style: italic;
+            }
+            .tvshows {
+                align-items: start;
+            }
         </style>
     </head>
     <body>
@@ -341,12 +355,11 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="tvshows">
-                            <strong>TV Shows</strong>
-                            <button class="top-rated" id="tvShows">Episodes</button>
-                            <button class="top-rated" id="server4">TV Server</button>
+                        <div class="tvshows" id="tvShowsContainer" style="display: none">
+                            <strong>Cast:</strong>
+                            <ul class="casts" id="cast"></ul>
                         </div>
-                        <div class="tvshows">
+                        <div class="tvshows" id="episodesContainer" style="display: none">
                             <strong>Episodes:</strong>
                             <ul class="episodes" id="episodes"></ul>
                         </div>
@@ -389,6 +402,7 @@
             const server4 = document.getElementById("server4");
             const tvShows = document.getElementById("tvShows");
             const episodelist = document.getElementById("episodes");
+            const casts = document.getElementById("cast");
             let ismovie = true;
             let nextpage = 1;
             let apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
@@ -407,6 +421,7 @@
                             return response.json();
                         })
                         .then((data) => {
+                            console.log("Movie Lists", data);
                             // Clear existing movie list
                             movieListContainer.innerHTML = "";
 
@@ -468,12 +483,17 @@
                                     );
                                     saveMovieIdToLocalstorage(
                                         tvShowId.movieId,
+                                        tvShowId.showName,
                                         episode.season_number,
                                         episode.episode_number
                                     );
                                 });
 
                                 episodelist.appendChild(episodeItem);
+                            }
+                            // Display the "Episodes" container only if there is cast information
+                            if (episodes.length > 1) {
+                                episodesContainer.style.display = "flex";
                             }
                         } else {
                             console.error('Invalid or missing "episodes" property in the API response.');
@@ -486,6 +506,39 @@
                 // Call the fetchEpisodes function to initiate the API request
                 fetchEpisodes();
 
+                function getMovieCast(movieId, apiKey) {
+                    const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/credits?api_key=${apiKey}`;
+
+                    fetch(apiUrl)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            const cast = data.cast || [];
+
+                            // Clear previous content
+                            casts.innerHTML = "";
+                            const mainCast = cast.filter((member) => member.order <= 6); // Adjust the threshold as needed
+                            // Append cast information to the HTML element
+                            mainCast.forEach((member) => {
+                                const castItem = document.createElement("li");
+                                castItem.className = "cast-item";
+                                castItem.innerHTML = `<strong> ${member.name}</strong> as ${member.character}; `;
+                                casts.appendChild(castItem);
+                            });
+                            // Display the "tvshows" container only if there is cast information
+                            if (mainCast.length > 0) {
+                                tvShowsContainer.style.display = "flex";
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching movie cast:", error);
+                        });
+                }
+
                 function addMovieToContainer(movie) {
                     // ... (your existing addMovieToContainer function remains unchanged)
                     const movieElement = document.createElement("iframe");
@@ -497,7 +550,9 @@
                     movieContainer.innerHTML = "";
                     movieContainer.appendChild(movieElement);
 
-                    document.getElementById("title").innerHTML = `<p><strong>Movie Title:</strong>  ${movie.name} </p>`;
+                    document.getElementById(
+                        "title"
+                    ).innerHTML = `<p><strong>TV Show Title: </strong>  ${movie.name} </p>`;
                     document.getElementById(
                         "movieDesc"
                     ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
@@ -506,10 +561,11 @@
                     // movieListItem.textContent = movie.title;
                     movieListItem.className = "movie-btn";
                     movieListItem.addEventListener("click", function () {
-                        saveMovieIdToLocalstorage(movie.id);
+                        saveMovieIdToLocalstorage(movie.id, movie.name);
                         apiurl = `https://api.themoviedb.org/3/tv/${movie.id}/season/1?api_key=${api_key}`;
                         fetchEpisodes();
                         playMovie(movie.id, movie.name, 1, 1, movie.overview);
+                        getMovieCast(movie.id, api_key);
                     });
 
                     const label = document.createElement("div");
@@ -558,7 +614,9 @@
                     movieIframe.className = "movie-iframe";
                     movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
                     movieContainer.appendChild(movieIframe);
-                    document.getElementById("title").innerHTML = `<p><strong>Movie Title:</strong>   ${title}<p/>`;
+                    document.getElementById(
+                        "title"
+                    ).innerHTML = `<p><strong>TV Show Title: </strong><i>${movieID.showName}</i> - <strong>Episode:</strong> <i>${title}</i><p/>`;
                     document.getElementById(
                         "movieDesc"
                     ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;
@@ -588,9 +646,10 @@
                 //
                 // Returns:
                 // - None
-                function saveMovieIdToLocalstorage(movieId, seasonNumber, episodeNumber) {
+                function saveMovieIdToLocalstorage(movieId, showName, seasonNumber, episodeNumber) {
                     const dataToSave = {
                         movieId: movieId,
+                        showName: showName,
                         seasonNumber: seasonNumber,
                         episodeNumber: episodeNumber,
                     };
@@ -652,14 +711,6 @@
                     fetchData();
                 });
 
-                tvShows.addEventListener("click", function () {
-                    episodelist.innerHTM = "";
-                    const imdb_id = getSavedMovieId();
-                    nextpage = 1;
-                    apiurl = `https://api.themoviedb.org/3/tv/${imdb_id}/season/1?api_key=${api_key}`;
-                    fetchEpisodes();
-                });
-
                 searchBtn.addEventListener("click", function () {
                     nextpage = 1;
                     apiurl = `https://api.themoviedb.org/3/search/tv?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
@@ -673,7 +724,6 @@
                     //vidsrc.me/embed/tv?tmdb=1399&season=1&episode=1
                     // const iframeSrc = "https://vidsrc.me/embed/movie?tmdb=" + imdb_id;
                     const iframeSrc = `https://vidsrc.me/embed/tv?tmdb=${movieData.movieId}&season=${movieData.seasonNumber}&episode=${movieData.episodeNumber}`;
-
                     https: movieContainer.innerHTML = "";
                     const movieIframe = document.createElement("iframe");
                     movieIframe.src = iframeSrc;
@@ -684,10 +734,8 @@
 
                 server2.addEventListener("click", function () {
                     const movieData = getSavedMovieData();
-
                     // const iframeSrc = "https://vivamax.asia/embed/" + imdb_id;
                     const iframeSrc = `https://vivamax.asia/embed/series?id=${movieData.movieId}&sea=${movieData.seasonNumber}&epi=${movieData.episodeNumber}`;
-
                     movieContainer.innerHTML = "";
                     const movieIframe = document.createElement("iframe");
                     movieIframe.src = iframeSrc;
@@ -698,7 +746,6 @@
 
                 server3.addEventListener("click", function () {
                     const movieData = getSavedMovieData();
-
                     // const iframeSrc = "https://flixembed.com/video/" + movieData.movieId;
                     const iframeSrc = `https://flixembed.com/video/${movieData.movieId}s${movieData.seasonNumber}e${movieData.episodeNumber}/`;
                     movieContainer.innerHTML = "";
