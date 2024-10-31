@@ -1,409 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>VPW - Free Pinoy Movies</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: "Poppins", sans-serif;
-            }
-            .popup-content {
-                padding: 20px;
-                border-radius: 5px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-                background: #224060;
-                width: 100%;
-                max-width: 1200px;
-                height: 100%;
-                border: 3px solid #f4d387;
-            }
-            .movie-container {
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
-            .pop-up-wrap {
-                display: flex;
-                justify-content: center;
-            }
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>VPW - Free Pinoy Movies</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      .popup-content {
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        background: #224060;
+        width: 100%;
+        max-width: 1200px;
+        height: 100%;
+        border: 3px solid #f4d387;
+      }
+      .movie-container {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .pop-up-wrap {
+        display: flex;
+        justify-content: center;
+      }
 
-            .col {
-                display: flex;
-            }
-            .movie-container {
-                padding: 0;
-            }
+      .col {
+        display: flex;
+      }
+      .movie-container {
+        padding: 0;
+      }
 
-            #movieList {
-                width: 100%;
-                height: auto;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .movie-btn,
-            .movie-title,
-            .movieListTitle,
-            .movie-desc {
-                width: 200px;
-                height: auto;
-                border-radius: 10px;
-                margin: 10px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 10px;
-                color: #fff;
-                background: rgb(131, 58, 180);
-                background: -moz-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: -webkit-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
-                cursor: pointer;
-            }
+      #movieList {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .movie-btn,
+      .movie-title,
+      .movieListTitle,
+      .movie-desc {
+        width: 200px;
+        height: auto;
+        border-radius: 10px;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10px;
+        color: #fff;
+        background: rgb(131, 58, 180);
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
+        cursor: pointer;
+      }
 
-            .movie-btn:hover,
-            .btn-r-status:hover {
-                background: rgb(63, 94, 251);
-                background: -moz-linear-gradient(90deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-                background: -webkit-linear-gradient(90deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-                background: linear-gradient(90deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1);
-                border: 2px solid #f4d387;
-            }
-            .movie-iframe {
-                width: 100%;
-                height: 100%;
-                border-radius: 10px;
-                border: 3px solid #f4d387;
-            }
-            #moviePlayer {
-                width: 100%;
-                height: 500px;
-                background: #222;
-                border-radius: 10px;
-            }
+      .movie-btn:hover,
+      .btn-r-status:hover {
+        background: rgb(63, 94, 251);
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(63, 94, 251, 1) 0%,
+          rgba(252, 70, 107, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(63, 94, 251, 1) 0%,
+          rgba(252, 70, 107, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(63, 94, 251, 1) 0%,
+          rgba(252, 70, 107, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1);
+        border: 2px solid #f4d387;
+      }
+      .movie-iframe {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        border: 3px solid #f4d387;
+      }
+      #moviePlayer {
+        width: 100%;
+        height: 500px;
+        background: #222;
+        border-radius: 10px;
+      }
 
-            .movieTime {
-                margin-top: 10px;
-                padding: 10px;
-                background: rgba(0, 0, 0, 0.1);
-                border-radius: 6px;
-                width: 100%;
-            }
+      .movieTime {
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        width: 100%;
+      }
 
-            .movieListTitle {
-                width: auto;
-                text-align: center;
-            }
+      .movieListTitle {
+        width: auto;
+        text-align: center;
+      }
 
-            .movie-title {
-                width: auto;
-                text-align: center;
-            }
+      .movie-title {
+        width: auto;
+        text-align: center;
+      }
 
-            .movie-desc {
-                width: auto;
-                text-align: left;
-            }
+      .movie-desc {
+        width: auto;
+        text-align: left;
+      }
 
-            .r-status {
-                width: 100%;
-            }
+      .r-status {
+        width: 100%;
+      }
 
-            .btn-r-status {
-                margin-top: 10px;
-                cursor: pointer;
-                background: rgb(131, 58, 180);
-                background: -moz-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: -webkit-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
-                padding: 20px 10px;
-                width: 100%;
-                border-radius: 10px;
-                border: 2px solid #f4d387;
-                color: #fff;
-                font-size: 20px;
-                font-weight: 700;
-            }
-            .movie-footer {
-                width: 100%;
-                text-align: center;
-                margin-top: 20px;
-                color: #fff;
-                font-style: italic;
-            }
-            .movie-footer a {
-                color: #f4d387;
-                text-decoration: none;
-            }
+      .btn-r-status {
+        margin-top: 10px;
+        cursor: pointer;
+        background: rgb(131, 58, 180);
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
+        padding: 20px 10px;
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #f4d387;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .movie-footer {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        color: #fff;
+        font-style: italic;
+      }
+      .movie-footer a {
+        color: #f4d387;
+        text-decoration: none;
+      }
 
-            @media only screen and (max-width: 600px) {
-                .popup-content {
-                    width: 100%;
-                }
-                #moviePlayer {
-                    height: 200px;
-                }
-                #closePopupButton {
-                    margin-top: 5px;
-                    font-size: 15px;
-                    width: 60%;
-                }
-                #movieList {
-                    justify-content: space-around;
-                }
-                .movie-btn {
-                    width: 120px;
-                    border: 5px;
-                }
+      @media only screen and (max-width: 600px) {
+        .popup-content {
+          width: 100%;
+        }
+        #moviePlayer {
+          height: 200px;
+        }
+        #closePopupButton {
+          margin-top: 5px;
+          font-size: 15px;
+          width: 60%;
+        }
+        #movieList {
+          justify-content: space-around;
+        }
+        .movie-btn {
+          width: 120px;
+          border: 5px;
+        }
 
-                .movie-img {
-                    width: 100% !important;
-                    height: 100% !important;
-                }
-            }
+        .movie-img {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
 
-            .movie-img {
-                width: 150px;
-                height: 230px;
-                border-radius: 10px;
-                align-self: center;
-            }
+      .movie-img {
+        width: 150px;
+        height: 230px;
+        border-radius: 10px;
+        align-self: center;
+      }
 
-            .btnContainer {
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-            }
+      .btnContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
 
-            .movieTitle {
-                text-align: left;
-                margin-top: 10px;
-            }
+      .movieTitle {
+        text-align: left;
+        margin-top: 10px;
+      }
 
-            .labels {
-                display: flex;
-                flex-direction: column;
-                gap: 3px;
-            }
-            .returnHome {
-                display: flex;
-                flex-direction: row;
-                gap: 15px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="movie-container">
-            <div class="pop-up-wrap">
-                <div class="popup-content">
-                    <div class="movie-container">
-                        <div id="title" class="movie-title">Movie:</div>
-                        <div id="moviePlayer"></div>
-                        <div id="movieDesc" class="movie-desc"></div>
-                        <div class="movieTime">
-                            <div class="movieListTitle">Select Free Movies Below</div>
-                            <div id="movieList"></div>
-                        </div>
-                        <div class="btnContainer">
-                            <button type="button" id="prevPage" class="btn-r-status">Previous Page</button>
-                            <button type="button" id="nextPage" class="btn-r-status">Next page</button>
-                        </div>
-                        <div class="returnHome">
-                            <a href="./status.html" target="_blank" class="r-status"
-                                ><button type="submit" class="btn-r-status">Return to Wifi Status</button></a
-                            >
-                            <a href="./movies.html" target="_blank" class="r-status"
-                                ><button type="submit" class="btn-r-status">Foreign Movies</button></a
-                            >
-                        </div>
-                        <div class="movie-footer">
-                            Created by:
-                            <a href="https://www.facebook.com/kibarne" target="_blank">Dindz Studio</a>
-                            &copy; All rights reserved 2023<br />
-                        </div>
-                    </div>
-                </div>
+      .labels {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .returnHome {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="movie-container">
+      <div class="pop-up-wrap">
+        <div class="popup-content">
+          <div class="movie-container">
+            <div id="title" class="movie-title">Movie:</div>
+            <div id="moviePlayer"></div>
+            <div id="movieDesc" class="movie-desc"></div>
+            <div class="movieTime">
+              <div class="movieListTitle">Select Free Movies Below</div>
+              <div id="movieList"></div>
             </div>
+            <div class="btnContainer">
+              <button type="button" id="prevPage" class="btn-r-status">
+                Previous Page
+              </button>
+              <button type="button" id="nextPage" class="btn-r-status">
+                Next page
+              </button>
+            </div>
+            <div class="returnHome">
+              <a href="./status.html" target="_blank" class="r-status"
+                ><button type="submit" class="btn-r-status">
+                  Return to Wifi Status
+                </button></a
+              >
+              <a href="./movies.html" target="_blank" class="r-status"
+                ><button type="submit" class="btn-r-status">
+                  Foreign Movies
+                </button></a
+              >
+            </div>
+            <div class="movie-footer">
+              Created by:
+              <a href="https://www.facebook.com/kibarne" target="_blank"
+                >Dindz Studio</a
+              >
+              &copy; All rights reserved 2023<br />
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <script>
-            const api_key = "90f386e9f1e62b0ecf3095a21f7afdc6";
-            const imageBaseURL = "https://image.tmdb.org/t/p/";
-            const nextPage = document.getElementById("nextPage");
-            const prevPage = document.getElementById("prevPage");
-            let nextpage = 1;
+    <script>
+      const api_key = "bc3c9d7803ea0be72a48f62802d6d290";
+      const imageBaseURL = "https://image.tmdb.org/t/p/";
+      const nextPage = document.getElementById("nextPage");
+      const prevPage = document.getElementById("prevPage");
+      let nextpage = 1;
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const movieContainer = document.getElementById("moviePlayer");
-                const movieListContainer = document.getElementById("movieList");
+      document.addEventListener("DOMContentLoaded", function () {
+        const movieContainer = document.getElementById("moviePlayer");
+        const movieListContainer = document.getElementById("movieList");
 
-                // Function to fetch data and update the movie list
-                function fetchData() {
-                    fetch(
-                        `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`
-                    )
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error("Network response was not ok");
-                            }
-                            return response.json();
-                        })
-                        .then((data) => {
-                            // Clear existing movie list
-                            movieListContainer.innerHTML = "";
+        // Function to fetch data and update the movie list
+        function fetchData() {
+          fetch(
+            `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Clear existing movie list
+              movieListContainer.innerHTML = "";
 
-                            if (Array.isArray(data.results)) {
-                                data.results.forEach((movie) => {
-                                    addMovieToContainer(movie);
-                                });
-                            } else {
-                                console.error("Invalid data format");
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error.message);
-                        });
-
-                    if (nextpage <= 1) {
-                        prevPage.style.display = "none";
-                    } else {
-                        prevPage.style.display = "block";
-                    }
-                }
-
-                // Initial fetch when the page loads
-                fetchData();
-
-                function addMovieToContainer(movie) {
-                    // ... (your existing addMovieToContainer function remains unchanged)
-                    const movieElement = document.createElement("iframe");
-                    movieElement.src = " https://flixembed.com/video/" + movie.id;
-                    movieElement.className = "movie-iframe";
-                    movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
-                    movieContainer.innerHTML = "";
-                    movieContainer.appendChild(movieElement);
-
-                    document.getElementById(
-                        "title"
-                    ).innerHTML = `<p><strong>Movie Title:</strong>  ${movie.title} </p>`;
-                    document.getElementById(
-                        "movieDesc"
-                    ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
-
-                    const movieListItem = document.createElement("div");
-                    // movieListItem.textContent = movie.title;
-                    movieListItem.className = "movie-btn";
-                    movieListItem.addEventListener("click", function () {
-                        playMovie(movie.id, movie.title, movie.overview);
-                    });
-                    const label = document.createElement("div");
-                    label.className = "labels";
-                    const movieImg = document.createElement("img");
-                    movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
-                    movieImg.alt = movie.title;
-                    movieImg.className = "movie-img";
-                    movieListItem.appendChild(movieImg);
-
-                    const movieTitle = document.createElement("h4");
-                    movieTitle.textContent = movie.title;
-                    movieTitle.className = "movieTitle";
-                    label.appendChild(movieTitle);
-
-                    const movieYear = document.createElement("p");
-                    movieYear.textContent = `Release: ${movie.release_date}`;
-                    movieYear.className = "movieYear";
-                    label.appendChild(movieYear);
-
-                    const movieRating = document.createElement("p");
-                    movieRating.textContent = `Rating: ${movie.vote_average}/10`;
-                    movieRating.className = "movieRating";
-                    label.appendChild(movieRating);
-
-                    const popularity = document.createElement("p");
-                    popularity.textContent = `Popularity: ${movie.popularity}`;
-                    popularity.className = "popularity";
-                    label.appendChild(popularity);
-
-                    movieListItem.appendChild(label);
-
-                    movieListContainer.appendChild(movieListItem);
-                }
-
-                function playMovie(imdb_id, title, movieDesc) {
-                    // ... (your existing playMovie function remains unchanged)
-                    const iframeSrc = " https://flixembed.com/video/" + imdb_id;
-                    movieContainer.innerHTML = "";
-                    const movieIframe = document.createElement("iframe");
-                    movieIframe.src = iframeSrc;
-                    movieIframe.className = "movie-iframe";
-                    movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
-                    movieContainer.appendChild(movieIframe);
-                    document.getElementById("title").innerHTML = `<p><strong>Movie Title:</strong>   ${title}<p/>`;
-                    document.getElementById(
-                        "movieDesc"
-                    ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;
-                    // Scroll to the top of the page
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "smooth", // You can use "auto" instead of "smooth" for an instant scroll
-                    });
-                }
-
-                nextPage.addEventListener("click", function () {
-                    // Increment the value of nextpage
-                    nextpage++;
-
-                    // Fetch new data and update the displayed items
-                    fetchData();
+              if (Array.isArray(data.results)) {
+                data.results.forEach((movie) => {
+                  addMovieToContainer(movie);
                 });
-
-                prevPage.addEventListener("click", function () {
-                    // Decrement the value of nextpage
-                    nextpage = Math.max(1, nextpage - 1);
-
-                    fetchData();
-                });
+              } else {
+                console.error("Invalid data format");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error.message);
             });
-        </script>
-    </body>
+
+          if (nextpage <= 1) {
+            prevPage.style.display = "none";
+          } else {
+            prevPage.style.display = "block";
+          }
+        }
+
+        // Initial fetch when the page loads
+        fetchData();
+
+        function addMovieToContainer(movie) {
+          // ... (your existing addMovieToContainer function remains unchanged)
+          const movieElement = document.createElement("iframe");
+          movieElement.src = "https://moviehab.to/embed/" + movie.id;
+          movieElement.className = "movie-iframe";
+          movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.innerHTML = "";
+          movieContainer.appendChild(movieElement);
+
+          document.getElementById(
+            "title"
+          ).innerHTML = `<p><strong>Movie Title:</strong>  ${movie.title} </p>`;
+          document.getElementById(
+            "movieDesc"
+          ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
+
+          const movieListItem = document.createElement("div");
+          // movieListItem.textContent = movie.title;
+          movieListItem.className = "movie-btn";
+          movieListItem.addEventListener("click", function () {
+            playMovie(movie.id, movie.title, movie.overview);
+          });
+          const label = document.createElement("div");
+          label.className = "labels";
+          const movieImg = document.createElement("img");
+          movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
+          movieImg.alt = movie.title;
+          movieImg.className = "movie-img";
+          movieListItem.appendChild(movieImg);
+
+          const movieTitle = document.createElement("h4");
+          movieTitle.textContent = movie.title;
+          movieTitle.className = "movieTitle";
+          label.appendChild(movieTitle);
+
+          const movieYear = document.createElement("p");
+          movieYear.textContent = `Release: ${movie.release_date}`;
+          movieYear.className = "movieYear";
+          label.appendChild(movieYear);
+
+          const movieRating = document.createElement("p");
+          movieRating.textContent = `Rating: ${movie.vote_average}/10`;
+          movieRating.className = "movieRating";
+          label.appendChild(movieRating);
+
+          const popularity = document.createElement("p");
+          popularity.textContent = `Popularity: ${movie.popularity}`;
+          popularity.className = "popularity";
+          label.appendChild(popularity);
+
+          movieListItem.appendChild(label);
+
+          movieListContainer.appendChild(movieListItem);
+        }
+
+        function playMovie(imdb_id, title, movieDesc) {
+          // ... (your existing playMovie function remains unchanged)
+          const iframeSrc = "https://moviehab.to/embed/" + imdb_id;
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+          document.getElementById(
+            "title"
+          ).innerHTML = `<p><strong>Movie Title:</strong>   ${title}<p/>`;
+          document.getElementById(
+            "movieDesc"
+          ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;
+          // Scroll to the top of the page
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth", // You can use "auto" instead of "smooth" for an instant scroll
+          });
+        }
+
+        nextPage.addEventListener("click", function () {
+          // Increment the value of nextpage
+          nextpage++;
+
+          // Fetch new data and update the displayed items
+          fetchData();
+        });
+
+        prevPage.addEventListener("click", function () {
+          // Decrement the value of nextpage
+          nextpage = Math.max(1, nextpage - 1);
+
+          fetchData();
+        });
+      });
+    </script>
+  </body>
 </html>

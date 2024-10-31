@@ -1,831 +1,870 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>VPW - Free Movies</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: "Poppins", sans-serif;
-            }
-            .popup-content {
-                padding: 20px;
-                border-radius: 5px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-                background: #224060;
-                width: 100%;
-                max-width: 1200px;
-                height: 100%;
-                border: 3px solid #f4d387;
-            }
-            .movie-container {
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
-            .pop-up-wrap {
-                display: flex;
-                justify-content: center;
-            }
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>VPW - Free Movies</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      .popup-content {
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        background: #224060;
+        width: 100%;
+        max-width: 1200px;
+        height: 100%;
+        border: 3px solid #f4d387;
+      }
+      .movie-container {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .pop-up-wrap {
+        display: flex;
+        justify-content: center;
+      }
 
-            .col {
-                display: flex;
-            }
-            .movie-container {
-                padding: 0;
-            }
+      .col {
+        display: flex;
+      }
+      .movie-container {
+        padding: 0;
+      }
 
-            #movieList {
-                width: 100%;
-                height: auto;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
+      #movieList {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
 
-            .top-rated {
-                background: rgb(131, 58, 180);
-                padding: 10px 20px;
-                border: 2px solid #fff;
-                border-radius: 10px;
-                color: #fff;
-                background: -moz-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: -webkit-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
-                cursor: pointer;
-            }
-            .movie-btn,
-            .movie-title,
-            .movieListTitle,
-            .movie-desc,
-            .categories,
-            .tvshows,
-            .no-results-message {
-                width: 200px;
-                height: auto;
-                border-radius: 10px;
-                margin: 10px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 10px;
-                color: #fff;
-                background: rgb(131, 58, 180);
-                background: -moz-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: -webkit-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
-                cursor: pointer;
-            }
+      .top-rated {
+        background: rgb(131, 58, 180);
+        padding: 10px 20px;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        color: #fff;
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
+        cursor: pointer;
+      }
+      .movie-btn,
+      .movie-title,
+      .movieListTitle,
+      .movie-desc,
+      .categories,
+      .tvshows,
+      .no-results-message {
+        width: 200px;
+        height: auto;
+        border-radius: 10px;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10px;
+        color: #fff;
+        background: rgb(131, 58, 180);
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
+        cursor: pointer;
+      }
 
-            .movie-btn:hover,
-            .btn-r-status:hover,
-            .top-rated:hover {
-                background: rgb(63, 94, 251);
-                background: -moz-linear-gradient(90deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-                background: -webkit-linear-gradient(90deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-                background: linear-gradient(90deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1);
-                border: 2px solid #f4d387;
-            }
-            .movie-iframe {
-                width: 100%;
-                height: 100%;
-                border-radius: 10px;
-                border: 3px solid #f4d387;
-            }
-            #moviePlayer {
-                width: 100%;
-                height: 500px;
-                background: #222;
-                border-radius: 10px;
-            }
+      .movie-btn:hover,
+      .btn-r-status:hover,
+      .top-rated:hover {
+        background: rgb(63, 94, 251);
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(63, 94, 251, 1) 0%,
+          rgba(252, 70, 107, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(63, 94, 251, 1) 0%,
+          rgba(252, 70, 107, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(63, 94, 251, 1) 0%,
+          rgba(252, 70, 107, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1);
+        border: 2px solid #f4d387;
+      }
+      .movie-iframe {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        border: 3px solid #f4d387;
+      }
+      #moviePlayer {
+        width: 100%;
+        height: 500px;
+        background: #222;
+        border-radius: 10px;
+      }
 
-            .movieTime {
-                margin-top: 10px;
-                padding: 10px;
-                background: rgba(0, 0, 0, 0.1);
-                border-radius: 6px;
-                width: 100%;
-            }
+      .movieTime {
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        width: 100%;
+      }
 
-            .movieListTitle {
-                width: auto;
-                text-align: center;
-            }
+      .movieListTitle {
+        width: auto;
+        text-align: center;
+      }
 
-            .movie-title {
-                width: auto;
-                text-align: center;
-            }
+      .movie-title {
+        width: auto;
+        text-align: center;
+      }
 
-            .movie-desc {
-                width: auto;
-                text-align: left;
-            }
+      .movie-desc {
+        width: auto;
+        text-align: left;
+      }
 
-            .r-status {
-                width: 100%;
-            }
+      .r-status {
+        width: 100%;
+      }
 
-            .categories,
-            .tvshows {
-                width: auto;
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-            }
+      .categories,
+      .tvshows {
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+      }
 
-            .btn-r-status {
-                margin-top: 10px;
-                cursor: pointer;
-                background: rgb(131, 58, 180);
-                background: -moz-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: -webkit-linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                background: linear-gradient(
-                    90deg,
-                    rgba(131, 58, 180, 1) 0%,
-                    rgba(253, 29, 29, 1) 50%,
-                    rgba(252, 176, 69, 1) 100%
-                );
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
-                padding: 20px 10px;
-                width: 100%;
-                border-radius: 10px;
-                border: 2px solid #f4d387;
-                color: #fff;
-                font-size: 20px;
-                font-weight: 700;
-            }
-            .movie-footer {
-                width: 100%;
-                text-align: center;
-                margin-top: 20px;
-                color: #fff;
-                font-style: italic;
-            }
-            .movie-footer a {
-                color: #f4d387;
-                text-decoration: none;
-            }
+      .btn-r-status {
+        margin-top: 10px;
+        cursor: pointer;
+        background: rgb(131, 58, 180);
+        background: -moz-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: -webkit-linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
+        padding: 20px 10px;
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #f4d387;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .movie-footer {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        color: #fff;
+        font-style: italic;
+      }
+      .movie-footer a {
+        color: #f4d387;
+        text-decoration: none;
+      }
 
-            @media only screen and (max-width: 600px) {
-                .popup-content {
-                    width: 100%;
-                }
-                #moviePlayer {
-                    height: 200px;
-                }
-                #closePopupButton {
-                    margin-top: 5px;
-                    font-size: 15px;
-                    width: 60%;
-                }
-                #movieList {
-                    justify-content: space-around;
-                }
-                .movie-btn {
-                    width: 120px;
-                    border: 5px;
-                }
+      @media only screen and (max-width: 600px) {
+        .popup-content {
+          width: 100%;
+        }
+        #moviePlayer {
+          height: 200px;
+        }
+        #closePopupButton {
+          margin-top: 5px;
+          font-size: 15px;
+          width: 60%;
+        }
+        #movieList {
+          justify-content: space-around;
+        }
+        .movie-btn {
+          width: 120px;
+          border: 5px;
+        }
 
-                .movie-img {
-                    width: 100% !important;
-                    height: 100% !important;
-                }
-                .categories {
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                }
-                .search-input {
-                    width: auto;
-                }
+        .movie-img {
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .categories {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .search-input {
+          width: auto;
+        }
 
-                .search {
-                    position: static !important;
-                }
-            }
-            .search {
-                display: flex;
-                align-items: center;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                right: 20px;
-            }
+        .search {
+          position: static !important;
+        }
+      }
+      .search {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 20px;
+      }
 
-            .top-rated.searchBtn {
-                width: 70px;
-                height: 35px;
-                padding: 0;
-                border-radius: 0;
-            }
+      .top-rated.searchBtn {
+        width: 70px;
+        height: 35px;
+        padding: 0;
+        border-radius: 0;
+      }
 
-            .search-img {
-                max-width: 100%;
-                max-height: 100%;
-            }
-            .movie-img {
-                width: 150px;
-                height: 230px;
-                border-radius: 10px;
-                align-self: center;
-            }
+      .search-img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .movie-img {
+        width: 150px;
+        height: 230px;
+        border-radius: 10px;
+        align-self: center;
+      }
 
-            .btnContainer {
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-            }
+      .btnContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
 
-            .movieTitle {
-                text-align: left;
-                margin-top: 10px;
-            }
+      .movieTitle {
+        text-align: left;
+        margin-top: 10px;
+      }
 
-            .labels {
-                display: flex;
-                flex-direction: column;
-                gap: 3px;
-            }
-            .returnHome {
-                display: flex;
-                flex-direction: row;
-                gap: 15px;
-            }
+      .labels {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .returnHome {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+      }
 
-            .search-input {
-                border: 2px solid #fff;
-                border-radius: 0;
-                height: 35px;
-                padding: 5px 10px;
-            }
+      .search-input {
+        border: 2px solid #fff;
+        border-radius: 0;
+        height: 35px;
+        padding: 5px 10px;
+      }
 
-            .episodes {
-                list-style: none;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 5px;
-            }
+      .episodes {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
 
-            .casts {
-                list-style: none;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            .cast-item {
-                font-style: italic;
-            }
-            .tvshows {
-                align-items: start;
-            }
-            .no-results-message {
-                width: auto;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="movie-container">
-            <div class="pop-up-wrap">
-                <div class="popup-content">
-                    <div class="movie-container">
-                        <div id="title" class="movie-title">Movie:</div>
-                        <div id="moviePlayer"></div>
-                        <div id="movieDesc" class="movie-desc"></div>
-                        <div class="categories">
-                            <strong>Categories:</strong>
-                            <button class="top-rated" id="popular">Korean</button>
-                            <button class="top-rated" id="toprated">English</button>
-                            <button class="top-rated" id="pnoy">Tagalog</button>
-                            <button class="top-rated" id="server1">Server 2</button>
-                            <button class="top-rated" id="server2">Pinoy Server</button>
-                            <button class="top-rated" id="server3">Pinoy Server 2</button>
-                            <div class="search">
-                                <input class="search-input" type="text" id="search" />
-                                <button class="top-rated searchBtn" id="searchBtn">
-                                    <img class="search-img" src="./assets/img/search.png" alt="" srcset="" />
-                                </button>
-                            </div>
-                        </div>
-                        <div class="tvshows" id="tvShowsContainer" style="display: none">
-                            <strong>Cast:</strong>
-                            <ul class="casts" id="cast"></ul>
-                        </div>
-                        <div class="tvshows" id="episodesContainer" style="display: none">
-                            <strong>Episodes:</strong>
-                            <ul class="episodes" id="episodes"></ul>
-                        </div>
-                        <div class="movieTime">
-                            <div class="movieListTitle">Select Free Movies Below</div>
-                            <div id="movieList"></div>
-                        </div>
-                        <div class="btnContainer">
-                            <button type="button" id="prevPage" class="btn-r-status">Previous Page</button>
-                            <button type="button" id="nextPage" class="btn-r-status">Next page</button>
-                        </div>
-                        <div class="returnHome">
-                            <a href="./status.html" target="_blank" class="r-status"
-                                ><button type="submit" class="btn-r-status">Wifi Status</button></a
-                            >
-                            <a href="./movies.html" target="_blank" class="r-status"
-                                ><button type="submit" class="btn-r-status">Movies</button></a
-                            >
-                        </div>
-                        <div class="movie-footer">
-                            Created by:
-                            <a href="https://www.facebook.com/kibarne" target="_blank">Dindz Studio</a>
-                            &copy; All rights reserved 2023<br />
-                        </div>
-                    </div>
-                </div>
+      .casts {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .cast-item {
+        font-style: italic;
+      }
+      .tvshows {
+        align-items: start;
+      }
+      .no-results-message {
+        width: auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="movie-container">
+      <div class="pop-up-wrap">
+        <div class="popup-content">
+          <div class="movie-container">
+            <div id="title" class="movie-title">Movie:</div>
+            <div id="moviePlayer"></div>
+            <div id="movieDesc" class="movie-desc"></div>
+            <div class="categories">
+              <strong>Categories:</strong>
+              <button class="top-rated" id="popular">Korean</button>
+              <button class="top-rated" id="toprated">English</button>
+              <button class="top-rated" id="pnoy">Tagalog</button>
+              <button class="top-rated" id="server1">Server 2</button>
+              <button class="top-rated" id="server2">Pinoy Server</button>
+              <!-- <button class="top-rated" id="server3">Pinoy Server 2</button> -->
+              <div class="search">
+                <input class="search-input" type="text" id="search" />
+                <button class="top-rated searchBtn" id="searchBtn">
+                  <img
+                    class="search-img"
+                    src="./assets/img/search.png"
+                    alt=""
+                    srcset="" />
+                </button>
+              </div>
             </div>
+            <div class="tvshows" id="tvShowsContainer" style="display: none">
+              <strong>Cast:</strong>
+              <ul class="casts" id="cast"></ul>
+            </div>
+            <div class="tvshows" id="episodesContainer" style="display: none">
+              <strong>Episodes:</strong>
+              <ul class="episodes" id="episodes"></ul>
+            </div>
+            <div class="movieTime">
+              <div class="movieListTitle">Select Free Movies Below</div>
+              <div id="movieList"></div>
+            </div>
+            <div class="btnContainer">
+              <button type="button" id="prevPage" class="btn-r-status">
+                Previous Page
+              </button>
+              <button type="button" id="nextPage" class="btn-r-status">
+                Next page
+              </button>
+            </div>
+            <div class="returnHome">
+              <a href="./status.html" target="_blank" class="r-status"
+                ><button type="submit" class="btn-r-status">
+                  Wifi Status
+                </button></a
+              >
+              <a href="./movies.html" target="_blank" class="r-status"
+                ><button type="submit" class="btn-r-status">Movies</button></a
+              >
+            </div>
+            <div class="movie-footer">
+              Created by:
+              <a href="https://www.facebook.com/kibarne" target="_blank"
+                >Dindz Studio</a
+              >
+              &copy; All rights reserved 2023<br />
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <script>
-            const api_key = "90f386e9f1e62b0ecf3095a21f7afdc6";
-            const imageBaseURL = "https://image.tmdb.org/t/p/";
-            const nextPage = document.getElementById("nextPage");
-            const prevPage = document.getElementById("prevPage");
-            const search = document.getElementById("search");
-            const searchBtn = document.getElementById("searchBtn");
-            const server1 = document.getElementById("server1");
-            const server2 = document.getElementById("server2");
-            const server3 = document.getElementById("server3");
-            const server4 = document.getElementById("server4");
-            const tvShows = document.getElementById("tvShows");
-            const episodelist = document.getElementById("episodes");
-            const casts = document.getElementById("cast");
-            let ismovie = true;
-            let nextpage = 1;
-            let apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
+    <script>
+      const api_key = "bc3c9d7803ea0be72a48f62802d6d290";
+      const imageBaseURL = "https://image.tmdb.org/t/p/";
+      const nextPage = document.getElementById("nextPage");
+      const prevPage = document.getElementById("prevPage");
+      const search = document.getElementById("search");
+      const searchBtn = document.getElementById("searchBtn");
+      const server1 = document.getElementById("server1");
+      const server2 = document.getElementById("server2");
+      const server3 = document.getElementById("server3");
+      const server4 = document.getElementById("server4");
+      const tvShows = document.getElementById("tvShows");
+      const episodelist = document.getElementById("episodes");
+      const casts = document.getElementById("cast");
+      let ismovie = true;
+      let nextpage = 1;
+      let apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const movieContainer = document.getElementById("moviePlayer");
-                const movieListContainer = document.getElementById("movieList");
+      document.addEventListener("DOMContentLoaded", function () {
+        const movieContainer = document.getElementById("moviePlayer");
+        const movieListContainer = document.getElementById("movieList");
 
-                // Function to fetch data and update the movie list
-                function fetchData() {
-                    fetch(apiurl)
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error("Network response was not ok");
-                            }
-                            return response.json();
-                        })
-                        .then((data) => {
-                            console.log("Movie Lists", data);
-                            // Clear existing movie list
-                            movieListContainer.innerHTML = "";
+        // Function to fetch data and update the movie list
+        function fetchData() {
+          fetch(apiurl)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Movie Lists", data);
+              // Clear existing movie list
+              movieListContainer.innerHTML = "";
 
-                            if (Array.isArray(data.results) && data.results.length > 0) {
-                                data.results.forEach((movie) => {
-                                    addMovieToContainer(movie);
-                                });
-                            } else {
-                                console.error("Invalid data format");
-                                displayNoResultsMessage();
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error.message);
-                        });
-
-                    if (nextpage <= 1) {
-                        prevPage.style.display = "none";
-                    } else {
-                        prevPage.style.display = "block";
-                    }
-                }
-
-                // Initial fetch when the page loads
-                fetchData();
-
-                function displayNoResultsMessage() {
-                    // Create a message element
-                    const noResultsMessage = document.createElement("p");
-                    noResultsMessage.className = "no-results-message";
-                    noResultsMessage.textContent = "No results found. Please try a different search.";
-
-                    // Append the message to the movie list container
-                    movieListContainer.appendChild(noResultsMessage);
-                }
-
-                async function fetchEpisodes() {
-                    try {
-                        const response = await fetch(apiurl);
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-
-                        const data = await response.json();
-
-                        // Check if 'episodes' property exists and is an array
-                        if (data.episodes && Array.isArray(data.episodes)) {
-                            const episodes = data.episodes;
-
-                            // Process the episodes data as needed
-
-                            // Clear existing content in episodelist
-                            episodelist.innerHTML = "";
-
-                            // You can now loop through the episodes and handle the data accordingly
-                            for (const episode of episodes) {
-                                const episodeItem = document.createElement("li");
-                                episodeItem.className = "top-rated";
-                                episodeItem.textContent = episode.name;
-
-                                // Add a click event listener to call playMovie function
-                                episodeItem.addEventListener("click", function () {
-                                    const tvShowId = getSavedMovieData();
-                                    playMovie(
-                                        episode.id,
-                                        episode.name,
-                                        episode.season_number,
-                                        episode.episode_number,
-                                        episode.overview
-                                    );
-                                    saveMovieIdToLocalstorage(
-                                        tvShowId.movieId,
-                                        tvShowId.showName,
-                                        episode.season_number,
-                                        episode.episode_number
-                                    );
-                                });
-
-                                episodelist.appendChild(episodeItem);
-                            }
-                            // Display the "Episodes" container only if there is cast information
-                            if (episodes.length > 1) {
-                                episodesContainer.style.display = "flex";
-                            }
-                        } else {
-                            console.error('Invalid or missing "episodes" property in the API response.');
-                        }
-                    } catch (error) {
-                        console.error("Error fetching data:", error.message);
-                    }
-                }
-
-                // Call the fetchEpisodes function to initiate the API request
-                fetchEpisodes();
-
-                // Retrieves the cast of a movie from the API using the provided movie ID and API key.
-                //
-                // Parameters:
-                // - movieId (number): The ID of the movie.
-                // - apiKey (string): The API key for accessing the movie database.
-                //
-                // Returns:
-                // - None
-                function getMovieCast(movieId, apiKey) {
-                    const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/credits?api_key=${apiKey}`;
-
-                    fetch(apiUrl)
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then((data) => {
-                            const cast = data.cast || [];
-
-                            // Clear previous content
-                            casts.innerHTML = "";
-                            const mainCast = cast.filter((member) => member.order <= 6); // Adjust the threshold as needed
-                            // Append cast information to the HTML element
-                            mainCast.forEach((member) => {
-                                const castItem = document.createElement("li");
-                                castItem.className = "cast-item";
-                                castItem.innerHTML = `<strong> ${member.name}</strong> as ${member.character}; `;
-                                casts.appendChild(castItem);
-                            });
-                            // Display the "tvshows" container only if there is cast information
-                            if (mainCast.length > 0) {
-                                tvShowsContainer.style.display = "flex";
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error fetching movie cast:", error);
-                        });
-                }
-
-                // Global variable to store content ratings
-                const contentRatingsMap = {};
-
-                // Function to fetch and save content ratings
-                function fetchAndSaveContentRating(movieId, apiKey) {
-                    const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/content_ratings?api_key=${apiKey}`;
-
-                    fetch(apiUrl)
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then((data) => {
-                            // Check if the data structure matches your expectations
-                            if (data && Array.isArray(data.results) && data.results.length > 0) {
-                                const rating = data.results[0].rating;
-                                saveContentRating(movieId, rating);
-                            } else {
-                                console.error("Invalid data format");
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error fetching content ratings:", error.message);
-                        });
-                }
-
-                // Function to find content rating (for simplicity, it returns the first rating)
-                function findContentRating(ratings) {
-                    console.log("All Ratings:", ratings); // Log all ratings
-                    return ratings.length > 0 ? ratings[0].rating : "N/A";
-                }
-
-                // Function to save content rating in the global variable
-                function saveContentRating(movieId, rating) {
-                    contentRatingsMap[movieId] = rating;
-                }
-
-                // Function to retrieve content rating for a movie ID
-                function getContentRating(movieId) {
-                    return contentRatingsMap[movieId] || "N/A";
-                }
-
-                function addMovieToContainer(movie) {
-                    // ... (your existing addMovieToContainer function remains unchanged)
-                    const movieElement = document.createElement("iframe");
-                    movieElement.src = "https://vidsrc.net/embed/movie?tmdb=" + movie.id;
-                    // movieElement.src = `https://vidsrc.to/embed/tv/${movie.id}/${movie.season_number}/${movie.episode_number}`;
-                    movieElement.className = "movie-iframe";
-                    movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
-
-                    movieContainer.innerHTML = "";
-                    movieContainer.appendChild(movieElement);
-
-                    document.getElementById(
-                        "title"
-                    ).innerHTML = `<p><strong>TV Show Title: </strong>  ${movie.name} </p>`;
-                    document.getElementById(
-                        "movieDesc"
-                    ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
-
-                    const movieListItem = document.createElement("div");
-                    // movieListItem.textContent = movie.title;
-                    movieListItem.className = "movie-btn";
-                    movieListItem.addEventListener("click", function () {
-                        saveMovieIdToLocalstorage(movie.id, movie.name);
-                        apiurl = `https://api.themoviedb.org/3/tv/${movie.id}/season/1?api_key=${api_key}`;
-                        fetchEpisodes();
-                        playMovie(movie.id, movie.name, 1, 1, movie.overview);
-                        getMovieCast(movie.id, api_key);
-                        fetchAndSaveContentRating(movie.id, api_key);
-                    });
-
-                    const label = document.createElement("div");
-                    label.className = "labels";
-
-                    const movieImg = document.createElement("img");
-                    movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
-                    movieImg.alt = movie.name;
-                    movieImg.className = "movie-img";
-                    movieListItem.appendChild(movieImg);
-
-                    const movieTitle = document.createElement("h4");
-                    movieTitle.textContent = movie.name;
-                    movieTitle.className = "movieTitle";
-                    label.appendChild(movieTitle);
-
-                    const movieYear = document.createElement("p");
-                    movieYear.textContent = `Release: ${movie.first_air_date}`;
-                    movieYear.className = "movieYear";
-                    label.appendChild(movieYear);
-
-                    const movieRating = document.createElement("p");
-                    movieRating.textContent = `Rating: ${movie.vote_average}/10`;
-                    movieRating.className = "movieRating";
-                    label.appendChild(movieRating);
-
-                    const popularity = document.createElement("p");
-                    popularity.textContent = `Popularity: ${movie.popularity}`;
-                    popularity.className = "popularity";
-                    label.appendChild(popularity);
-
-                    movieListItem.appendChild(label);
-
-                    movieListContainer.appendChild(movieListItem);
-                }
-
-                function playMovie(imdb_id, title, seasonNo, episodeNo, movieDesc) {
-                    // ... (your existing playMovie function remains unchanged)
-                    const movieID = getSavedMovieData();
-                    const rating = getContentRating(movieID.movieId);
-                    // const iframeSrc = "https://vidsrc.to/embed/tv/" + imdb_id;
-                    const iframeSrc = `https://vidsrc.to/embed/tv/${movieID.movieId}/${seasonNo}/${episodeNo}`;
-
-                    movieContainer.innerHTML = "";
-                    const movieIframe = document.createElement("iframe");
-                    movieIframe.src = iframeSrc;
-                    movieIframe.className = "movie-iframe";
-                    movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
-                    movieContainer.appendChild(movieIframe);
-                    document.getElementById(
-                        "title"
-                    ).innerHTML = `<p><strong>TV Show Title: </strong><i>${movieID.showName}</i> - <strong>Episode:</strong> <i>${title}</i> - Rating: <i>${rating}</i><p/>`;
-                    document.getElementById(
-                        "movieDesc"
-                    ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;
-                    // Scroll to the top of the page
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "smooth", // You can use "auto" instead of "smooth" for an instant scroll
-                    });
-                }
-
-                // function saveMovieIdToLocalstorage(movieId) {
-                //   localStorage.setItem("selectedMovieId", movieId);
-                // }
-
-                // function getSavedMovieId() {
-                //   return localStorage.getItem("selectedMovieId");
-                // }
-
-                // getSavedMovieId();
-
-                // Saves the provided movie ID, season number, and episode number to local storage.
-                //
-                // Parameters:
-                // - movieId (string): The ID of the movie to be saved.
-                // - seasonNumber (number): The season number of the movie to be saved.
-                // - episodeNumber (number): The episode number of the movie to be saved.
-                //
-                // Returns:
-                // - None
-                function saveMovieIdToLocalstorage(movieId, showName, seasonNumber, episodeNumber) {
-                    const dataToSave = {
-                        movieId: movieId,
-                        showName: showName,
-                        seasonNumber: seasonNumber,
-                        episodeNumber: episodeNumber,
-                    };
-
-                    // Convert the data to a JSON string and store it in local storage
-                    localStorage.setItem("selectedMovieData", JSON.stringify(dataToSave));
-                }
-
-                // Retrieves the saved movie data from the local storage.
-                function getSavedMovieData() {
-                    const savedDataString = localStorage.getItem("selectedMovieData");
-                    if (savedDataString) {
-                        return JSON.parse(savedDataString);
-                    }
-                    return null;
-                }
-
-                nextPage.addEventListener("click", function () {
-                    // Increment the value of nextpage
-                    nextpage++;
-                    apiurl = apiurl.replace(/page=\d+/, `page=${nextpage}`);
-
-                    // Fetch new data and update the displayed items
-                    fetchData();
+              if (Array.isArray(data.results) && data.results.length > 0) {
+                data.results.forEach((movie) => {
+                  addMovieToContainer(movie);
                 });
-
-                prevPage.addEventListener("click", function () {
-                    // Decrement the value of nextpage
-                    nextpage = Math.max(1, nextpage - 1);
-
-                    apiurl = apiurl.replace(/page=\d+/, `page=${nextpage}`);
-
-                    fetchData();
-                });
-
-                const toprated = document.getElementById("toprated");
-                const popular = document.getElementById("popular");
-                const pnoy = document.getElementById("pnoy");
-
-                toprated.addEventListener("click", function () {
-                    nextpage = 1;
-                    // apiurl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${api_key}&page=${nextpage}&language=en-US&sort_by=popularity.desc`;
-                    apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=en`;
-                    // Log the updated value to the console (you can remove this line in your actual code)
-
-                    // Fetch new data and update the displayed items
-                    fetchData();
-                });
-
-                popular.addEventListener("click", function () {
-                    nextpage = 1;
-                    apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=ko&year=2023`;
-                    fetchData();
-                });
-
-                pnoy.addEventListener("click", function () {
-                    nextpage = 1;
-                    apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
-                    fetchData();
-                });
-
-                searchBtn.addEventListener("click", function () {
-                    nextpage = 1;
-                    apiurl = `https://api.themoviedb.org/3/search/tv?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
-                    fetchData();
-                    search.value = "";
-                });
-
-                // play in server 1
-                server1.addEventListener("click", function () {
-                    const movieData = getSavedMovieData();
-                    //vidsrc.me/embed/tv?tmdb=1399&season=1&episode=1
-                    // const iframeSrc = "https://vidsrc.me/embed/movie?tmdb=" + imdb_id;
-                    const iframeSrc = `https://vidsrc.me/embed/tv?tmdb=${movieData.movieId}&season=${movieData.seasonNumber}&episode=${movieData.episodeNumber}`;
-                    https: movieContainer.innerHTML = "";
-                    const movieIframe = document.createElement("iframe");
-                    movieIframe.src = iframeSrc;
-                    movieIframe.className = "movie-iframe";
-                    movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
-                    movieContainer.appendChild(movieIframe);
-                });
-
-                server2.addEventListener("click", function () {
-                    const movieData = getSavedMovieData();
-                    // const iframeSrc = "https://vivamax.asia/embed/" + imdb_id;
-                    const iframeSrc = `https://vivamax.asia/embed/series?id=${movieData.movieId}&sea=${movieData.seasonNumber}&epi=${movieData.episodeNumber}`;
-                    movieContainer.innerHTML = "";
-                    const movieIframe = document.createElement("iframe");
-                    movieIframe.src = iframeSrc;
-                    movieIframe.className = "movie-iframe";
-                    movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
-                    movieContainer.appendChild(movieIframe);
-                });
-
-                server3.addEventListener("click", function () {
-                    const movieData = getSavedMovieData();
-                    // const iframeSrc = "https://flixembed.com/video/" + movieData.movieId;
-                    const iframeSrc = `https://flixembed.com/video/${movieData.movieId}s${movieData.seasonNumber}e${movieData.episodeNumber}/`;
-                    movieContainer.innerHTML = "";
-                    const movieIframe = document.createElement("iframe");
-                    movieIframe.src = iframeSrc;
-                    movieIframe.className = "movie-iframe";
-                    movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
-                    movieContainer.appendChild(movieIframe);
-                });
+              } else {
+                console.error("Invalid data format");
+                displayNoResultsMessage();
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error.message);
             });
-        </script>
-    </body>
+
+          if (nextpage <= 1) {
+            prevPage.style.display = "none";
+          } else {
+            prevPage.style.display = "block";
+          }
+        }
+
+        // Initial fetch when the page loads
+        fetchData();
+
+        function displayNoResultsMessage() {
+          // Create a message element
+          const noResultsMessage = document.createElement("p");
+          noResultsMessage.className = "no-results-message";
+          noResultsMessage.textContent =
+            "No results found. Please try a different search.";
+
+          // Append the message to the movie list container
+          movieListContainer.appendChild(noResultsMessage);
+        }
+
+        async function fetchEpisodes() {
+          try {
+            const response = await fetch(apiurl);
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Check if 'episodes' property exists and is an array
+            if (data.episodes && Array.isArray(data.episodes)) {
+              const episodes = data.episodes;
+
+              // Process the episodes data as needed
+
+              // Clear existing content in episodelist
+              episodelist.innerHTML = "";
+
+              // You can now loop through the episodes and handle the data accordingly
+              for (const episode of episodes) {
+                const episodeItem = document.createElement("li");
+                episodeItem.className = "top-rated";
+                episodeItem.textContent = episode.name;
+
+                // Add a click event listener to call playMovie function
+                episodeItem.addEventListener("click", function () {
+                  const tvShowId = getSavedMovieData();
+                  playMovie(
+                    episode.id,
+                    episode.name,
+                    episode.season_number,
+                    episode.episode_number,
+                    episode.overview
+                  );
+                  saveMovieIdToLocalstorage(
+                    tvShowId.movieId,
+                    tvShowId.showName,
+                    episode.season_number,
+                    episode.episode_number
+                  );
+                });
+
+                episodelist.appendChild(episodeItem);
+              }
+              // Display the "Episodes" container only if there is cast information
+              if (episodes.length > 1) {
+                episodesContainer.style.display = "flex";
+              }
+            } else {
+              console.error(
+                'Invalid or missing "episodes" property in the API response.'
+              );
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error.message);
+          }
+        }
+
+        // Call the fetchEpisodes function to initiate the API request
+        fetchEpisodes();
+
+        // Retrieves the cast of a movie from the API using the provided movie ID and API key.
+        //
+        // Parameters:
+        // - movieId (number): The ID of the movie.
+        // - apiKey (string): The API key for accessing the movie database.
+        //
+        // Returns:
+        // - None
+        function getMovieCast(movieId, apiKey) {
+          const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/credits?api_key=${apiKey}`;
+
+          fetch(apiUrl)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              const cast = data.cast || [];
+
+              // Clear previous content
+              casts.innerHTML = "";
+              const mainCast = cast.filter((member) => member.order <= 6); // Adjust the threshold as needed
+              // Append cast information to the HTML element
+              mainCast.forEach((member) => {
+                const castItem = document.createElement("li");
+                castItem.className = "cast-item";
+                castItem.innerHTML = `<strong> ${member.name}</strong> as ${member.character}; `;
+                casts.appendChild(castItem);
+              });
+              // Display the "tvshows" container only if there is cast information
+              if (mainCast.length > 0) {
+                tvShowsContainer.style.display = "flex";
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching movie cast:", error);
+            });
+        }
+
+        // Global variable to store content ratings
+        const contentRatingsMap = {};
+
+        // Function to fetch and save content ratings
+        function fetchAndSaveContentRating(movieId, apiKey) {
+          const apiUrl = `https://api.themoviedb.org/3/tv/${movieId}/content_ratings?api_key=${apiKey}`;
+
+          fetch(apiUrl)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Check if the data structure matches your expectations
+              if (
+                data &&
+                Array.isArray(data.results) &&
+                data.results.length > 0
+              ) {
+                const rating = data.results[0].rating;
+                saveContentRating(movieId, rating);
+              } else {
+                console.error("Invalid data format");
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching content ratings:", error.message);
+            });
+        }
+
+        // Function to find content rating (for simplicity, it returns the first rating)
+        function findContentRating(ratings) {
+          console.log("All Ratings:", ratings); // Log all ratings
+          return ratings.length > 0 ? ratings[0].rating : "N/A";
+        }
+
+        // Function to save content rating in the global variable
+        function saveContentRating(movieId, rating) {
+          contentRatingsMap[movieId] = rating;
+        }
+
+        // Function to retrieve content rating for a movie ID
+        function getContentRating(movieId) {
+          return contentRatingsMap[movieId] || "N/A";
+        }
+
+        function addMovieToContainer(movie) {
+          // ... (your existing addMovieToContainer function remains unchanged)
+          const movieElement = document.createElement("iframe");
+          movieElement.src = "https://vidsrc.net/embed/movie?tmdb=" + movie.id;
+          // movieElement.src = `https://vidsrc.to/embed/tv/${movie.id}/${movie.season_number}/${movie.episode_number}`;
+          movieElement.className = "movie-iframe";
+          movieElement.setAttribute("allowfullscreen", "true"); // Allow full screen
+
+          movieContainer.innerHTML = "";
+          movieContainer.appendChild(movieElement);
+
+          document.getElementById(
+            "title"
+          ).innerHTML = `<p><strong>TV Show Title: </strong>  ${movie.name} </p>`;
+          document.getElementById(
+            "movieDesc"
+          ).innerHTML = `<p style=" font-style: italic; margin-top:10px; line-height: 1.5"> <strong> Movie Overview: </strong>  ${movie.overview}</p>`;
+
+          const movieListItem = document.createElement("div");
+          // movieListItem.textContent = movie.title;
+          movieListItem.className = "movie-btn";
+          movieListItem.addEventListener("click", function () {
+            saveMovieIdToLocalstorage(movie.id, movie.name);
+            apiurl = `https://api.themoviedb.org/3/tv/${movie.id}/season/1?api_key=${api_key}`;
+            fetchEpisodes();
+            playMovie(movie.id, movie.name, 1, 1, movie.overview);
+            getMovieCast(movie.id, api_key);
+            fetchAndSaveContentRating(movie.id, api_key);
+          });
+
+          const label = document.createElement("div");
+          label.className = "labels";
+
+          const movieImg = document.createElement("img");
+          movieImg.src = `${imageBaseURL}/w342${movie.poster_path}`;
+          movieImg.alt = movie.name;
+          movieImg.className = "movie-img";
+          movieListItem.appendChild(movieImg);
+
+          const movieTitle = document.createElement("h4");
+          movieTitle.textContent = movie.name;
+          movieTitle.className = "movieTitle";
+          label.appendChild(movieTitle);
+
+          const movieYear = document.createElement("p");
+          movieYear.textContent = `Release: ${movie.first_air_date}`;
+          movieYear.className = "movieYear";
+          label.appendChild(movieYear);
+
+          const movieRating = document.createElement("p");
+          movieRating.textContent = `Rating: ${movie.vote_average}/10`;
+          movieRating.className = "movieRating";
+          label.appendChild(movieRating);
+
+          const popularity = document.createElement("p");
+          popularity.textContent = `Popularity: ${movie.popularity}`;
+          popularity.className = "popularity";
+          label.appendChild(popularity);
+
+          movieListItem.appendChild(label);
+
+          movieListContainer.appendChild(movieListItem);
+        }
+
+        function playMovie(imdb_id, title, seasonNo, episodeNo, movieDesc) {
+          // ... (your existing playMovie function remains unchanged)
+          const movieID = getSavedMovieData();
+          const rating = getContentRating(movieID.movieId);
+          // const iframeSrc = "https://vidsrc.to/embed/tv/" + imdb_id;
+          const iframeSrc = `https://vidsrc.to/embed/tv/${movieID.movieId}/${seasonNo}/${episodeNo}`;
+
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+          document.getElementById(
+            "title"
+          ).innerHTML = `<p><strong>TV Show Title: </strong><i>${movieID.showName}</i> - <strong>Episode:</strong> <i>${title}</i> - Rating: <i>${rating}</i><p/>`;
+          document.getElementById(
+            "movieDesc"
+          ).innerHTML = `<p style=" font-style: italic;line-height: 1.5"> <strong> Movie Overview: </strong>  ${movieDesc}</p>`;
+          // Scroll to the top of the page
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth", // You can use "auto" instead of "smooth" for an instant scroll
+          });
+        }
+
+        // function saveMovieIdToLocalstorage(movieId) {
+        //   localStorage.setItem("selectedMovieId", movieId);
+        // }
+
+        // function getSavedMovieId() {
+        //   return localStorage.getItem("selectedMovieId");
+        // }
+
+        // getSavedMovieId();
+
+        // Saves the provided movie ID, season number, and episode number to local storage.
+        //
+        // Parameters:
+        // - movieId (string): The ID of the movie to be saved.
+        // - seasonNumber (number): The season number of the movie to be saved.
+        // - episodeNumber (number): The episode number of the movie to be saved.
+        //
+        // Returns:
+        // - None
+        function saveMovieIdToLocalstorage(
+          movieId,
+          showName,
+          seasonNumber,
+          episodeNumber
+        ) {
+          const dataToSave = {
+            movieId: movieId,
+            showName: showName,
+            seasonNumber: seasonNumber,
+            episodeNumber: episodeNumber,
+          };
+
+          // Convert the data to a JSON string and store it in local storage
+          localStorage.setItem("selectedMovieData", JSON.stringify(dataToSave));
+        }
+
+        // Retrieves the saved movie data from the local storage.
+        function getSavedMovieData() {
+          const savedDataString = localStorage.getItem("selectedMovieData");
+          if (savedDataString) {
+            return JSON.parse(savedDataString);
+          }
+          return null;
+        }
+
+        nextPage.addEventListener("click", function () {
+          // Increment the value of nextpage
+          nextpage++;
+          apiurl = apiurl.replace(/page=\d+/, `page=${nextpage}`);
+
+          // Fetch new data and update the displayed items
+          fetchData();
+        });
+
+        prevPage.addEventListener("click", function () {
+          // Decrement the value of nextpage
+          nextpage = Math.max(1, nextpage - 1);
+
+          apiurl = apiurl.replace(/page=\d+/, `page=${nextpage}`);
+
+          fetchData();
+        });
+
+        const toprated = document.getElementById("toprated");
+        const popular = document.getElementById("popular");
+        const pnoy = document.getElementById("pnoy");
+
+        toprated.addEventListener("click", function () {
+          nextpage = 1;
+          // apiurl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${api_key}&page=${nextpage}&language=en-US&sort_by=popularity.desc`;
+          apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=en`;
+          // Log the updated value to the console (you can remove this line in your actual code)
+
+          // Fetch new data and update the displayed items
+          fetchData();
+        });
+
+        popular.addEventListener("click", function () {
+          nextpage = 1;
+          apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=ko&year=2023`;
+          fetchData();
+        });
+
+        pnoy.addEventListener("click", function () {
+          nextpage = 1;
+          apiurl = `https://api.themoviedb.org/3/discover/tv?api_key=${api_key}&sort_by=popularity.desc&include_adult=false&page=${nextpage}&with_original_language=tl`;
+          fetchData();
+        });
+
+        searchBtn.addEventListener("click", function () {
+          nextpage = 1;
+          apiurl = `https://api.themoviedb.org/3/search/tv?api_key=${api_key}&query=${search.value}&page=${nextpage}&include_adult=false`;
+          fetchData();
+          search.value = "";
+        });
+
+        // play in server 1
+        server1.addEventListener("click", function () {
+          const movieData = getSavedMovieData();
+          //vidsrc.me/embed/tv?tmdb=1399&season=1&episode=1
+          // const iframeSrc = "https://vidsrc.me/embed/movie?tmdb=" + imdb_id;
+          const iframeSrc = `https://vidsrc.me/embed/tv?tmdb=${movieData.movieId}&season=${movieData.seasonNumber}&episode=${movieData.episodeNumber}`;
+          https: movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+        });
+
+        server2.addEventListener("click", function () {
+          const movieData = getSavedMovieData();
+          // const iframeSrc = "https://vivamax.asia/embed/" + imdb_id;
+          const iframeSrc = ` https://moviehab.to/embed/series?tmdb=${movieData.movieId}&sea=${movieData.seasonNumber}&epi=${movieData.episodeNumber}`;
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+        });
+        /*
+        server3.addEventListener("click", function () {
+          const movieData = getSavedMovieData();
+          // const iframeSrc = "https://flixembed.com/video/" + movieData.movieId;
+          const iframeSrc = `https://streamug.pro/video${movieData.movieId}s${movieData.seasonNumber}e${movieData.episodeNumber}/`;
+          movieContainer.innerHTML = "";
+          const movieIframe = document.createElement("iframe");
+          movieIframe.src = iframeSrc;
+          movieIframe.className = "movie-iframe";
+          movieIframe.setAttribute("allowfullscreen", "true"); // Allow full screen
+          movieContainer.appendChild(movieIframe);
+        });
+        */
+      });
+    </script>
+  </body>
 </html>
